@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - OTT Streaming Platform</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>🎬 Admin Dashboard</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Upload Section -->
+    <section class="upload-section">
+      <h2>➕ Add New Movie</h2>
+      <form id="uploadForm">
+        <input type="text" id="title" placeholder="Title" required>
+        <input type="text" id="genre" placeholder="Genre" required>
+        <textarea id="description" placeholder="Description" required></textarea>
+        <input type="text" id="poster" placeholder="Poster URL or Image Path" required>
+        <input type="text" id="video_url" placeholder="Video URL or Local Link" required>
+        <button type="submit">Upload Movie</button>
+      </form>
+    </section>
+
+    <!-- Existing Movies -->
+    <section class="movie-list">
+      <h2>🎞️ Existing Movies</h2>
+      <div id="adminMovieContainer"></div>
+    </section>
+  </main>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

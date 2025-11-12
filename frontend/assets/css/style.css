@@ -1,0 +1,182 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a, #3a0ca3);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  color: #fff;
+}
+
+/* Smooth animated gradient */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.form-container {
+  background-color: #1f1f1f;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  width: 350px;
+  text-align: center;
+}
+
+header {
+  background-color: #202020;
+  padding: 15px;
+  text-align: center;
+}
+
+nav input {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+nav a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.movie-card {
+  background-color: #181818;
+  padding: 10px;
+  margin: 15px;
+  display: inline-block;
+  width: 200px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.form-container {
+  width: 350px;
+  margin: 100px auto;
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.form-container input {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 8px;
+}
+
+button {
+  padding: 10px;
+  background: #e50914;
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #b00710;
+}
+.upload-section, .movie-list {
+  background: #181818;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.upload-section form input,
+.upload-section form textarea {
+  display: block;
+  width: 95%;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+.upload-section h2, .movie-list h2 {
+  text-align: center;
+  color: #e50914;
+}
+
+.movie-card button {
+  background: #e50914;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.movie-card button:hover {
+  background: #b00710;
+}
+/* Admin Panel Styling */
+.upload-section, .movie-list {
+  background: #181818;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.upload-section form input,
+.upload-section form textarea {
+  display: block;
+  width: 95%;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background: #222;
+  color: white;
+}
+
+.upload-section form textarea {
+  height: 80px;
+  resize: none;
+}
+
+.upload-section h2, .movie-list h2 {
+  text-align: center;
+  color: #e50914;
+}
+
+.movie-card {
+  background: #202020;
+  display: inline-block;
+  width: 200px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.movie-card button {
+  background: #e50914;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.movie-card button:hover {
+  background: #b00710;
+}
+
