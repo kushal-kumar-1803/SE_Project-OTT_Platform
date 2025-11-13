@@ -1,0 +1,38 @@
+{
+  "info": {
+    "name": "OTT Streaming Platform API Tests",
+    "_postman_id": "ott-collection-001",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/register",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "register"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n   \"name\": \"Test User\",\n   \"email\": \"test@example.com\",\n   \"password\": \"Test1234\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Login User",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:5000/api/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"Test1234\"\n}"
+        }
+      }
+    }
+  ]
+}
