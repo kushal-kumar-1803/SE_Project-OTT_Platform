@@ -1,182 +1,167 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  height: 100vh;
+:root{
+  --bg:#111;
+  --card:#181818;
+  --muted:#b3b3b3;
+  --accent:#e50914;
+  --white:#fff;
+}
+*{box-sizing:border-box;font-family:Inter, "Segoe UI", Arial, sans-serif}
+body{margin:0;background:linear-gradient(180deg,#0b0b0b 0%, #0f0f0f 100%);color:var(--white);min-height:100vh}
+.site-header{display:flex;justify-content:space-between;align-items:center;padding:18px 36px;background:transparent;position:sticky;top:0;z-index:10}
+.logo{font-weight:700;font-size:24px;color:var(--white)}
+.header-actions{display:flex;gap:14px;align-items:center}
+.header-actions input{padding:8px 12px;border-radius:6px;border:0;background:#222;color:var(--white);min-width:220px}
+.header-actions a, .header-actions button{color:var(--white);text-decoration:none;padding:8px 12px;border-radius:6px;background:transparent;border:1px solid rgba(255,255,255,0.06)}
+.hero{height:420px;background:url('assets/images/hero.jpg') center/cover no-repeat;display:flex;align-items:flex-end;padding:48px}
+.hero {
+    height: 70vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.hero-overlay {
+    background: linear-gradient(to top, #000 10%, transparent);
+}
+.hero-overlay{background:linear-gradient(180deg,rgba(0,0,0,0) 0, rgba(0,0,0,0.7) 60%);padding:20px;border-radius:6px;max-width:720px}
+.hero h1{font-size:40px;margin:0 0 6px}
+.hero p{color:var(--muted);margin:0 0 12px}
+.hero-actions button{margin-right:8px;padding:10px 18px;border-radius:4px;border:0;cursor:pointer}
+.hero-actions button:first-child{background:var(--white);color:#000}
+.hero-actions button:last-child{background:rgba(255,255,255,0.12);color:var(--white)}
+
+main{padding:28px 48px}
+.row{margin:24px 0}
+.row h2{margin:6px 0 12px;font-size:18px}
+.row-cards{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.card{min-width:180px;height:260px;background:var(--card);border-radius:6px;overflow:hidden;padding:8px;flex:0 0 auto;cursor:pointer;position:relative;transition:transform .18s}
+.card img{width:100%;height:170px;object-fit:cover;border-radius:4px}
+.card .meta{padding:8px}
+.card .title{font-weight:600;font-size:14px}
+.card .genre{font-size:12px;color:var(--muted)}
+
+.card:hover{transform:translateY(-8px);box-shadow:0 12px 30px rgba(0,0,0,0.6)}
+
+.site-footer{padding:24px 48px;color:var(--muted);font-size:14px;border-top:1px solid rgba(255,255,255,0.02)}
+
+.detail-main{padding:36px}
+.detail-card{background:linear-gradient(180deg,#131313,#0f0f0f);padding:24px;border-radius:8px;max-width:900px;margin:0 auto}
+.detail-actions button{margin-right:10px;padding:10px 16px;border-radius:6px;border:0}
+.video-placeholder{height:320px;background:#000;margin-top:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+
+.form-container{max-width:420px;margin:60px auto;padding:32px;background:#111;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.6);text-align:center}
+.form-container h2{margin:0 0 18px}
+.form-container input, .form-container textarea{width:100%;padding:12px;margin:8px 0;border-radius:6px;border:0;background:#222;color:var(--white)}
+.form-container button{background:var(--accent);color:#fff;padding:12px 18px;border:0;border-radius:6px;cursor:pointer;width:100%}
+
+.admin-main{padding:36px 48px}
+.admin-section{background:#0f0f0f;padding:18px;border-radius:8px;margin-bottom:18px}
+.admin-section input, .admin-section textarea{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:0;background:#222;color:var(--white)}
+.admin-section button{padding:10px 16px;background:var(--accent);color:#fff;border:0;border-radius:6px;cursor:pointer}
+.admin-movie{display:flex;align-items:center;justify-content:space-between;padding:8px;border-bottom:1px solid rgba(255,255,255,0.02)}
+
+.movie-row {
+  margin: 20px 0;
+}
+
+.row-title {
+  color: white;
+  margin: 10px 50px;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.row-cards {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #0f0f0f, #1a1a1a, #3a0ca3);
-  background-size: 400% 400%;
-  animation: gradientShift 8s ease infinite;
-  color: #fff;
+  overflow-x: auto;
+  padding-left: 50px;
+  gap: 15px;
 }
 
-/* Smooth animated gradient */
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.movie-card {
+  width: 180px;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
-.form-container {
-  background-color: #1f1f1f;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-  width: 350px;
-  text-align: center;
+.movie-card:hover {
+  transform: scale(1.12);
 }
 
-header {
-  background-color: #202020;
-  padding: 15px;
-  text-align: center;
+.hero-banner {
+  height: 70vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 60px;
+  color: white;
+  position: relative;
 }
 
-nav input {
-  padding: 8px;
+.hero-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+
+.featured-content {
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+}
+
+.featured-content h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.btn-white, .btn-dark {
+  padding: 10px 20px;
+  border: none;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
   margin-right: 10px;
 }
 
-nav a {
-  color: #fff;
-  margin: 0 10px;
-  text-decoration: none;
+.btn-white {
+  background: white;
+  color: black;
 }
 
-.movie-card {
-  background-color: #181818;
-  padding: 10px;
-  margin: 15px;
-  display: inline-block;
-  width: 200px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.movie-card img {
-  width: 100%;
-  border-radius: 8px;
-}
-
-.form-container {
-  width: 350px;
-  margin: 100px auto;
-  background: #222;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.form-container input {
-  display: block;
-  width: 90%;
-  margin: 10px auto;
-  padding: 8px;
-}
-
-button {
-  padding: 10px;
-  background: #e50914;
-  border: none;
-  color: white;
-  cursor: pointer;
-  width: 100%;
-  border-radius: 5px;
-}
-
-button:hover {
-  background: #b00710;
-}
-.upload-section, .movie-list {
-  background: #181818;
-  margin: 20px;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.upload-section form input,
-.upload-section form textarea {
-  display: block;
-  width: 95%;
-  margin: 10px auto;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-}
-
-.upload-section h2, .movie-list h2 {
-  text-align: center;
-  color: #e50914;
-}
-
-.movie-card button {
-  background: #e50914;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.movie-card button:hover {
-  background: #b00710;
-}
-/* Admin Panel Styling */
-.upload-section, .movie-list {
-  background: #181818;
-  margin: 20px;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.upload-section form input,
-.upload-section form textarea {
-  display: block;
-  width: 95%;
-  margin: 10px auto;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  background: #222;
+.btn-dark {
+  background: rgba(255,255,255,0.3);
   color: white;
 }
 
-.upload-section form textarea {
-  height: 80px;
-  resize: none;
+.row-title {
+    font-size: 28px;
+    color: white;
+    margin: 20px 0 10px 20px;
 }
 
-.upload-section h2, .movie-list h2 {
-  text-align: center;
-  color: #e50914;
-}
-
-.movie-card {
-  background: #202020;
-  display: inline-block;
-  width: 200px;
-  margin: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
+.row-cards {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 0 20px;
 }
 
 .movie-card img {
-  width: 100%;
-  border-radius: 5px;
+    width: 180px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.movie-card button {
-  background: #e50914;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  margin-top: 10px;
-  border-radius: 5px;
-  cursor: pointer;
+.movie-card img:hover {
+    transform: scale(1.05);
 }
 
-.movie-card button:hover {
-  background: #b00710;
+.movie-section {
+    margin-top: 40px;
 }
-

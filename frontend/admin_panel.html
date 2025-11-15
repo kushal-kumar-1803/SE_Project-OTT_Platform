@@ -1,42 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - OTT Streaming Platform</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <header>
-    <h1>🎬 Admin Dashboard</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="#" onclick="logout()">Logout</a>
-    </nav>
+  <header class="site-header">
+    <div class="logo">OTT Admin</div>
+    <div class="header-actions">
+      <a href="/">Home</a>
+      <button id="logoutBtn">Logout</button>
+    </div>
   </header>
 
-  <main>
-    <!-- Upload Section -->
-    <section class="upload-section">
-      <h2>➕ Add New Movie</h2>
-      <form id="uploadForm">
-        <input type="text" id="title" placeholder="Title" required>
-        <input type="text" id="genre" placeholder="Genre" required>
-        <textarea id="description" placeholder="Description" required></textarea>
-        <input type="text" id="poster" placeholder="Poster URL or Image Path" required>
-        <input type="text" id="video_url" placeholder="Video URL or Local Link" required>
-        <button type="submit">Upload Movie</button>
+  <main class="admin-main">
+    <section class="admin-section">
+      <h2>Add Movie</h2>
+      <form id="addMovieForm">
+        <input id="title" placeholder="Title" required />
+        <input id="genre" placeholder="Genre" required />
+        <input id="video_url" placeholder="Video URL" />
+        <textarea id="description" placeholder="Description"></textarea>
+        <button type="submit">Add Movie</button>
       </form>
     </section>
 
-    <!-- Existing Movies -->
-    <section class="movie-list">
-      <h2>🎞️ Existing Movies</h2>
-      <div id="adminMovieContainer"></div>
+    <section class="admin-section">
+      <h2>Existing Movies</h2>
+      <div id="adminMovies"></div>
     </section>
   </main>
 
-  <script src="assets/js/api.js"></script>
   <script src="assets/js/admin.js"></script>
 </body>
 </html>

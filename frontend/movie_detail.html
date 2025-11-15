@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Movie Details</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Movie Detail</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <div class="movie-details">
-    <img id="poster" alt="Movie Poster">
-    <div class="info">
-      <h2 id="title"></h2>
-      <p id="description"></p>
-      <video id="videoPlayer" controls width="600">
-        <source id="videoSrc" type="video/mp4">
-      </video>
+  <header class="site-header">
+    <div class="logo">OTT</div>
+    <div class="header-actions">
+      <a href="/">Home</a>
+      <a href="/login">Login</a>
     </div>
-  </div>
+  </header>
 
-  <script src="assets/js/api.js"></script>
-  <script src="assets/js/playback.js"></script>
+  <main class="detail-main">
+    <div class="detail-card">
+      <h1 id="movieTitle">Title</h1>
+      <p id="movieGenre">Genre</p>
+      <p id="movieDesc">Description</p>
+      <div class="detail-actions">
+        <button id="playBtn">Play</button>
+        <button id="subscribeBtn">Subscribe</button>
+      </div>
+      <div id="videoPlaceholder" class="video-placeholder">Video player placeholder</div>
+    </div>
+  </main>
+
+  <script src="assets/js/movie.js"></script>
 </body>
 </html>

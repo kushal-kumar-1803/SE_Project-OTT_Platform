@@ -7,11 +7,11 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
-    
-    # Create tables
+
     cursor.executescript("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,5 +37,6 @@ def init_db():
         FOREIGN KEY(user_id) REFERENCES users(id)
     );
     """)
+
     conn.commit()
     conn.close()

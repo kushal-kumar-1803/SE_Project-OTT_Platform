@@ -7,49 +7,56 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+
   <div class="form-container">
     <h2>Login</h2>
+
     <form id="loginForm">
       <input type="email" id="email" placeholder="Email" required>
       <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Login</button>
+      <button type="submit" id="loginBtn">Login</button>
     </form>
-    <p>New here? <a href="register.html">Register now</a></p>
+
+    <p>Don't have an account? <a href="register.html">Register</a></p>
   </div>
 
-  <script src="assets/js/api.js"></script>
   <script>
-    // Login form handler
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Get input values
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const emailValue = document.getElementById("email").value;
+      const passwordValue = document.getElementById("password").value;
 
-      // Call backend API
-      const res = await loginUser(email, password);
+      try {
+        const response = await fetch("http://127.0.0.1:5000/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: emailValue,
+            password: passwordValue
+          })
+        });
 
-      // If login is successful
-      if (res.success) {
-        alert('✅ Login successful!');
+        const data = await response.json();
+        console.log(data);
 
-        // Store token and role in localStorage
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("role", res.role);
-        localStorage.setItem("user", res.user || email);
+        if (data.token) {
+          // Save JWT token in browser
+          localStorage.setItem("token", data.token);
+          alert("Login Successful!");
 
-        // Redirect based on user role
-        if (res.role === "admin") {
-          window.location.href = "admin_panel.html";
+          // FIXED REDIRECT
+          window.location.replace("http://127.0.0.1:5000/");
         } else {
-          window.location.href = "index.html";
+          alert("Error: " + data.error);
         }
 
-      } else {
-        alert('❌ Invalid email or password. Please try again.');
+      } catch (error) {
+        console.error("Login Error:", error);
+        alert("Something went wrong!");
       }
     });
   </script>
+
 </body>
 </html>

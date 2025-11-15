@@ -1,27 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OTT Streaming Platform</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>OTT — Home</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <header>
-    <h1>🎬 OTT Streaming Platform</h1>
-    <nav>
-      <input type="text" id="searchBar" placeholder="Search for movies...">
-      <button onclick="searchMovies()">Search</button>
-      <a href="login.html">Login</a>
-      <a href="register.html">Register</a>
-    </nav>
-  </header>
 
-  <main id="movieContainer">
-    <!-- Movies will be dynamically loaded here -->
-  </main>
+<header class="site-header">
+    <div class="logo">OTT</div>
+    <div class="header-actions">
+        <input id="searchInput" placeholder="Search movies..." />
+        <a id="loginLink" href="/login">Login</a>
+        <a id="adminLink" href="/admin">Admin</a>
+    </div>
+</header>
 
-  <script src="assets/js/api.js"></script>
-  <script src="assets/js/app.js"></script>
+<main>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div class="hero-overlay">
+            <h1 id="heroTitle">Featured</h1>
+            <p id="heroDesc">Top picks for you</p>
+
+            <div class="hero-actions">
+                <button id="playHero">Play</button>
+                <button id="moreHero">More Info</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROWS WILL BE ADDED HERE -->
+    <div id="movieRows"></div>
+
+</main>
+
+<footer class="site-footer">
+    <p>OTT Platform — Demo</p>
+</footer>
+
+<script src="assets/js/tmdb.js"></script>
+
 </body>
 </html>
