@@ -1,33 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- frontend/movie_detail.html -->
+<!doctype html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Movie Detail</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/style.css"/>
 </head>
 <body>
   <header class="site-header">
     <div class="logo">OTT</div>
     <div class="header-actions">
-      <a href="/">Home</a>
-      <a href="/login">Login</a>
+      <input id="searchInput" placeholder="Search movies..." />
+      <a id="loginLink" href="/login">Login</a>
+      <a id="adminLink" href="/admin">Admin</a>
     </div>
   </header>
 
-  <main class="detail-main">
-    <div class="detail-card">
-      <h1 id="movieTitle">Title</h1>
-      <p id="movieGenre">Genre</p>
-      <p id="movieDesc">Description</p>
-      <div class="detail-actions">
-        <button id="playBtn">Play</button>
-        <button id="subscribeBtn">Subscribe</button>
+  <main>
+    <section id="detail-hero" class="detail-hero">
+      <div id="detail-backdrop" class="detail-backdrop"></div>
+      <div class="detail-content">
+        <img id="detail-poster" src="" alt="poster" class="detail-poster"/>
+        <div class="detail-meta">
+          <h1 id="detail-title"></h1>
+          <p id="detail-genres" class="muted"></p>
+          <p id="detail-overview"></p>
+          <p><strong>Release:</strong> <span id="detail-release"></span></p>
+          <p><strong>Rating:</strong> <span id="detail-rating"></span></p>
+          <div class="detail-actions">
+            <button id="playBtn" class="btn-white">Play</button>
+            <button id="watchlistBtn" class="btn-dark">Add to Watchlist</button>
+          </div>
+        </div>
       </div>
-      <div id="videoPlaceholder" class="video-placeholder">Video player placeholder</div>
-    </div>
+    </section>
+
+    <section id="more-like" style="padding: 20px;">
+      <h2>More like this</h2>
+      <div id="similar-row" class="row-cards"></div>
+    </section>
   </main>
 
-  <script src="assets/js/movie.js"></script>
+  <script src="/assets/js/header.js"></script>
+  <script src="/assets/js/movie_detail.js"></script>
 </body>
 </html>
