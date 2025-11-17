@@ -1,71 +1,124 @@
-// frontend/assets/js/movie_detail.js
-// This file expects backend endpoint at /movies/<id> and /movies/<id>/similar (optional)
+console.log("MOVIE DETAIL JS LOADED");
 
-(function () {
-  function getMovieIdFromPath() {
-    // path like /movie/123
+// -------- Helpers --------
+function getMovieId() {
     const parts = window.location.pathname.split("/");
-    return parts[parts.length - 1] || parts[parts.length - 2];
-  }
+    const id = parts.pop() || parts.pop(); // handles trailing slash
+    return id;
+}
 
-  async function fetchJSON(url) {
-    const r = await fetch(url);
-    return r.json();
-  }
-
-  async function loadDetail() {
-    const id = getMovieIdFromPath();
-    if (!id) {
-      console.error("No movie id found in path");
-      return;
+async function fetchJSON(url) {
+    try {
+        const res = await fetch(url);
+        return await res.json();
+    } catch (err) {
+        console.error("Fetch Error:", err);
+        return {};
     }
+}
 
+// -------- Main Logic --------
+(async () => {
+    const id = getMovieId();
+    console.log("Movie ID:", id);
+
+    // Load Movie Details
     const detail = await fetchJSON(`/movies/${id}`);
-    if (detail.error) {
-      console.error(detail);
-      alert("Failed to load movie details.");
-      return;
+    console.log("Movie Detail:", detail);
+
+    if (!detail || detail.error) {
+        alert("Failed to load movie details.");
+        return;
     }
 
-    document.getElementById("detail-title").innerText = detail.title;
-    document.getElementById("detail-overview").innerText = detail.overview;
-    document.getElementById("detail-genres").innerText = (detail.genres || []).join(", ");
-    document.getElementById("detail-release").innerText = detail.release_date || "N/A";
-    document.getElementById("detail-rating").innerText = detail.vote_average || "N/A";
-    document.getElementById("detail-poster").src = detail.poster || "/assets/images/placeholder.jpg";
-    document.getElementById("detail-backdrop").style.backgroundImage = `url(${detail.backdrop || detail.poster})`;
-
-    document.getElementById("playBtn").onclick = () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Please login to play content.");
-        window.location.href = "/login";
-        return;
-      }
-      alert("Play (demo) for movie: " + detail.title);
+    // Safe-fill DOM elements
+    const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = value || "";
     };
 
-    document.getElementById("watchlistBtn").onclick = () => {
-      const stored = JSON.parse(localStorage.getItem("watchlist") || "[]");
-      if (stored.includes(detail.id)) {
-        // remove
-        const newList = stored.filter(i => i !== detail.id);
-        localStorage.setItem("watchlist", JSON.stringify(newList));
-        document.getElementById("watchlistBtn").innerText = "Add to Watchlist";
-      } else {
-        stored.push(detail.id);
-        localStorage.setItem("watchlist", JSON.stringify(stored));
-        document.getElementById("watchlistBtn").innerText = "Remove from Watchlist";
-      }
-    };
+    // Fill Text Data
+    setText("detail-title", detail.title);
+    setText("detail-genres", (detail.genres || []).join(", "));
+    setText("detail-overview", detail.overview);
+    setText("detail-release", detail.release_date);
+    setText("detail-rating", detail.rating);
 
-    // update watchlist button label
-    const watchlist = JSON.parse(localStorage.getItem("watchlist") || "[]");
-    document.getElementById("watchlistBtn").innerText = watchlist.includes(detail.id) ? "Remove from Watchlist" : "Add to Watchlist";
+    // Poster
+    const posterEl = document.getElementById("detail-poster");
+    if (posterEl) posterEl.src = detail.poster;
 
-    // optionally: load similar movies via TMDB raw data, but backend doesn't expose similar by default.
-    // For speed, we skip similar; you can call TMDB directly from frontend if desired.
-  }
+    // Backdrop Fix
+    const backdropEl = document.getElementById("detail-backdrop");
+    if (backdropEl) {
+        backdropEl.style.backgroundImage = `url(${detail.backdrop || detail.poster})`;
+    }
 
-  loadDetail();
+    // -------- PLAY TRAILER --------
+    const trailerBtn = document.getElementById("playTrailerBtn");
+    if (trailerBtn) {
+        trailerBtn.onclick = async () => {
+            console.log("Trailer button clicked!");
+
+            const trailer = await fetchJSON(`/movies/trailer/${id}`);
+            console.log("Trailer response:", trailer);
+
+            if (!trailer || !trailer.youtube_key) {
+                alert("Trailer not available for this movie.");
+                return;
+            }
+
+            const url = `https://www.youtube.com/watch?v=${trailer.youtube_key}`;
+            console.log("Opening Trailer URL:", url);
+
+            window.open(url, "_blank");
+        };
+    }
+
+    // -------- PLAY MOVIE --------
+    const playMovieBtn = document.getElementById("playMovieBtn");
+    if (playMovieBtn) {
+        playMovieBtn.onclick = () => {
+            const subscribed = localStorage.getItem("is_subscribed");
+            console.log("Subscription Status:", subscribed);
+
+            if (subscribed !== "1") {
+                alert("Please subscribe to watch full movies.");
+                window.location.href = "/subscribe";
+                return;
+            }
+
+            window.location.href = `/movies/stream/${id}`;
+        };
+    }
+
+    // -------- WATCHLIST --------
+    const watchlistBtn = document.getElementById("watchlistBtn");
+    if (watchlistBtn) {
+        watchlistBtn.onclick = () => {
+            let list = JSON.parse(localStorage.getItem("watchlist") || "[]");
+
+            // Convert id to string for consistency
+            const movieId = String(id);
+
+            if (!list.includes(movieId)) {
+                list.push(movieId);
+                watchlistBtn.innerText = "Remove from Watchlist";
+                alert("Added to watchlist!");
+            } else {
+                list = list.filter(x => x !== movieId);
+                watchlistBtn.innerText = "Add to Watchlist";
+                alert("Removed from watchlist.");
+            }
+
+            localStorage.setItem("watchlist", JSON.stringify(list));
+        };
+
+        // Pre-set watchlist button text
+        const userList = JSON.parse(localStorage.getItem("watchlist") || "[]");
+        if (userList.includes(String(id))) {
+            watchlistBtn.innerText = "Remove from Watchlist";
+        }
+    }
+
 })();

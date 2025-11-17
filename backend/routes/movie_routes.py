@@ -5,7 +5,8 @@ from backend.database.db_connection import get_db_connection
 from backend.services.tmdb_service import (
     search_movies as tmdb_search,
     get_movie_detail,
-    get_image_url
+    get_image_url,
+    get_movie_trailer  # ✅ IMPORTANT FIX
 )
 
 movie_bp = Blueprint("movies", __name__)
@@ -69,11 +70,24 @@ def tmdb_search_route():
 
 
 # ============================================================
-# 3) TMDB MOVIE DETAIL  --> /movies/<id>
+# 3) GET MOVIE TRAILER FIRST  --> /movies/trailer/<id>
+# (MUST COME BEFORE '/movies/<id>')
+# ============================================================
+@movie_bp.route('/trailer/<int:movie_id>', methods=['GET'])
+def movie_trailer(movie_id):
+    return get_movie_trailer(movie_id)
+
+
+
+# ============================================================
+# 4) TMDB MOVIE DETAIL  --> /movies/<id>
 # ============================================================
 @movie_bp.route("/<int:movie_id>", methods=["GET"])
 def tmdb_detail(movie_id):
     data = get_movie_detail(movie_id)
+
+    if not data or "id" not in data:
+        return jsonify({"error": "Movie not found"}), 404
 
     return jsonify({
         "id": data.get("id"),
@@ -85,3 +99,13 @@ def tmdb_detail(movie_id):
         "poster": get_image_url(data.get("poster_path"), "w500"),
         "backdrop": get_image_url(data.get("backdrop_path"), "original")
     })
+
+@movie_bp.route("/stream/<int:movie_id>")
+def stream_movie(movie_id):
+    # Demo movie file
+    return """
+    <h1 style='color:white'>Streaming Full Movie (Demo)</h1>
+    <video width='900' controls autoplay>
+      <source src='/assets/movies/demo.mp4' type='video/mp4'>
+    </video>
+    """

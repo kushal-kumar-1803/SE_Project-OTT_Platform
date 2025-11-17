@@ -76,3 +76,22 @@ def search_tmdb_movies():
     ]
 
     return jsonify({"results": results})
+
+def get_movie_trailer(movie_id):
+    data = get_movie_videos(movie_id)
+
+    if "results" not in data:
+        return jsonify({"error": "No videos found"}), 404
+
+    # Filter for official YouTube trailers
+    for video in data["results"]:
+        if video["site"] == "YouTube" and video["type"] in ["Trailer", "Teaser"]:
+            return jsonify({"youtube_key": video["key"]})
+
+    # fallback: return first YouTube video
+    for video in data["results"]:
+        if video["site"] == "YouTube":
+            return jsonify({"youtube_key": video["key"]})
+
+    return jsonify({"error": "Trailer not available"}), 404
+
