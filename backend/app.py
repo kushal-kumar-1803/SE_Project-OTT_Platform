@@ -27,9 +27,6 @@ init_db()
 # ----------------------------
 # Register API Blueprints
 # ----------------------------
-# Initialize DB
-init_db()
-
 # Register Blueprints
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(movie_bp, url_prefix="/movies")
@@ -56,6 +53,14 @@ def register_page():
 @app.route("/movie/<int:movie_id>")
 def movie_detail(movie_id):
     return send_from_directory("../frontend", "movie_detail.html")
+
+@app.route("/admin")
+def admin_page():
+    return send_from_directory("../frontend", "admin_panel.html")
+
+@app.route("/admin/login")
+def admin_login_page():
+    return send_from_directory("../frontend", "admin_login.html")
 
 
 # -----------------------------
