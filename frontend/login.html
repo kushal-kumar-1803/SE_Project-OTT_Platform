@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - OTT Platform</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
 </head>
+
 <body>
 
   <div class="form-container">
@@ -14,12 +15,15 @@
     <form id="loginForm">
       <input type="email" id="email" placeholder="Email" required>
       <input type="password" id="password" placeholder="Password" required>
+      <p><a href="forgot.html">Forgot Password?</a></p>
+
       <button type="submit" id="loginBtn">Login</button>
     </form>
 
-    <p>Don't have an account? <a href="register.html">Register</a></p>
+    <p>Don't have an account? <a href="/register">Register</a></p>
   </div>
 
+  <!-- PUT SCRIPT AT BOTTOM ALWAYS -->
   <script>
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -28,7 +32,7 @@
       const passwordValue = document.getElementById("password").value;
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/auth/login", {
+        const response = await fetch("/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -38,21 +42,18 @@
         });
 
         const data = await response.json();
-        console.log(data);
+        console.log("LOGIN RESPONSE:", data);
 
         if (data.token) {
-          // Save JWT token in browser
           localStorage.setItem("token", data.token);
           alert("Login Successful!");
-
-          // FIXED REDIRECT
-          window.location.replace("http://127.0.0.1:5000/");
+          window.location.href = "/";
         } else {
           alert("Error: " + data.error);
         }
 
-      } catch (error) {
-        console.error("Login Error:", error);
+      } catch (err) {
+        console.error("JS Error:", err);
         alert("Something went wrong!");
       }
     });

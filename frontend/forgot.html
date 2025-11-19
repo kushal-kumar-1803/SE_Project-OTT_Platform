@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forgot Password</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div class="form-container">
+  <h2>Reset Password</h2>
+
+  <input type="email" id="email" placeholder="Enter your email">
+
+  <button onclick="sendOTP()">Send OTP</button>
+
+  <hr>
+
+  <input type="text" id="otp" placeholder="Enter OTP">
+  <input type="password" id="newpass" placeholder="New Password">
+
+  <button onclick="resetPass()">Reset Password</button>
+</div>
+
+<script>
+function sendOTP() {
+  fetch("/auth/forgot_password", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ email: email.value })
+  })
+  .then(r => r.json())
+  .then(d => alert(d.message || d.error));
+}
+
+function resetPass() {
+  fetch("/auth/reset_password", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      email: email.value,
+      otp: otp.value,
+      new_password: newpass.value
+    })
+  })
+  .then(r => r.json())
+  .then(d => {
+    alert(d.message || d.error);
+    if (d.message) window.location.href = "/login";
+  });
+}
+</script>
+
+</body>
+</html>

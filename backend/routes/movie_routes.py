@@ -1,5 +1,3 @@
-# backend/routes/movie_routes.py
-
 from flask import Blueprint, request, jsonify
 from backend.database.db_connection import get_db_connection
 from backend.services.tmdb_service import (
@@ -7,16 +5,17 @@ from backend.services.tmdb_service import (
     get_movie_detail,
     get_image_url
 )
+from backend.controllers.movie_controller import get_movie_by_id
 
 movie_bp = Blueprint("movies", __name__)
 
-
-# ============================================================
-# 1) LOCAL DATABASE SEARCH  --> /movies/search?q=
-# ============================================================
+# ---------------------------------------------------
+# LOCAL SEARCH
+# ---------------------------------------------------
 @movie_bp.route("/search", methods=["GET"])
 def search_local():
     query = request.args.get("q", "").lower().strip()
+
     if not query:
         return jsonify({"results": []})
 
@@ -45,18 +44,19 @@ def search_local():
     return jsonify({"results": results})
 
 
-# ============================================================
-# 2) TMDB SEARCH  --> /movies/tmdb_search?q=
-# ============================================================
+# ---------------------------------------------------
+# TMDB SEARCH
+# ---------------------------------------------------
 @movie_bp.route("/tmdb_search", methods=["GET"])
 def tmdb_search_route():
     query = request.args.get("q", "").strip()
+
     if not query:
         return jsonify({"results": []})
 
     data = tmdb_search(query)
-    results = []
 
+    results = []
     for m in data.get("results", []):
         results.append({
             "id": m.get("id"),
@@ -68,10 +68,10 @@ def tmdb_search_route():
     return jsonify({"results": results})
 
 
-# ============================================================
-# 3) TMDB MOVIE DETAIL  --> /movies/<id>
-# ============================================================
-@movie_bp.route("/<int:movie_id>", methods=["GET"])
+# ---------------------------------------------------
+# TMDB MOVIE DETAIL
+# ---------------------------------------------------
+@movie_bp.route("/tmdb/<int:movie_id>", methods=["GET"])
 def tmdb_detail(movie_id):
     data = get_movie_detail(movie_id)
 
@@ -80,8 +80,15 @@ def tmdb_detail(movie_id):
         "title": data.get("title"),
         "overview": data.get("overview"),
         "genres": [g["name"] for g in data.get("genres", [])],
-        "release_date": data.get("release_date"),
-        "rating": data.get("vote_average"),
         "poster": get_image_url(data.get("poster_path"), "w500"),
-        "backdrop": get_image_url(data.get("backdrop_path"), "original")
+        "backdrop": get_image_url(data.get("backdrop_path"), "original"),
     })
+
+
+# ---------------------------------------------------
+# UNIVERSAL MOVIE DETAIL (LOCAL OR TMDB)
+# /movies/<id>
+# ---------------------------------------------------
+@movie_bp.route("/<int:movie_id>", methods=["GET"])
+def movie_detail(movie_id):
+    return get_movie_by_id(movie_id)

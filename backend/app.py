@@ -1,3 +1,5 @@
+# backend/app.py
+
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 
@@ -6,6 +8,7 @@ from backend.routes.auth_routes import auth_bp
 from backend.routes.movie_routes import movie_bp
 from backend.routes.subscription_routes import sub_bp
 from backend.routes.admin_routes import admin_bp
+from backend.extensions import mail
 
 app = Flask(
     __name__,
@@ -16,16 +19,27 @@ app = Flask(
 CORS(app)
 app.config["SECRET_KEY"] = "secret_key"
 
-# Initialize database
+# EMAIL CONFIG
+app.config.update(
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USERNAME="yourgmail@gmail.com",
+    MAIL_PASSWORD="your_app_password"
+)
+
+mail.init_app(app)
+
+# DB INIT
 init_db()
 
-# Register Blueprints
+# REGISTER BLUEPRINTS
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(movie_bp, url_prefix="/movies")
 app.register_blueprint(sub_bp, url_prefix="/subscriptions")
 app.register_blueprint(admin_bp, url_prefix="/admin")
 
-# Serve Frontend
+# FRONTEND
 @app.route("/")
 def home_page():
     return send_from_directory("../frontend", "index.html")
@@ -43,7 +57,7 @@ def movie_detail(movie_id):
     return send_from_directory("../frontend", "movie_detail.html")
 
 @app.route("/assets/<path:filename>")
-def serve_assets(filename):
+def assets(filename):
     return send_from_directory("../frontend/assets", filename)
 
 @app.route("/<path:filename>")

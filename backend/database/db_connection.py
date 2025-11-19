@@ -18,7 +18,9 @@ def init_db():
         name TEXT,
         email TEXT UNIQUE,
         password TEXT,
-        role TEXT DEFAULT 'user'
+        role TEXT DEFAULT 'user',
+        reset_token TEXT,
+        reset_expiry TEXT
     );
 
     CREATE TABLE IF NOT EXISTS movies (
