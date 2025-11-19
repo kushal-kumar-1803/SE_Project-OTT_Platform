@@ -2,87 +2,96 @@
 
 from flask import request, jsonify
 from backend.database.db_connection import get_db_connection
-from backend.services.tmdb_service import get_movie_detail, search_movies as tmdb_search, get_image_url
+from backend.services.tmdb_service import (
+    get_movie_detail,
+    search_movies as tmdb_search,
+    get_image_url
+)
 
-
-# -------------------------
-# LOCAL DB MOVIE FUNCTIONS
-# -------------------------
-
+# -----------------------------
+# LOCAL DB MOVIES
+# -----------------------------
 def get_all_movies():
-    """Return movies stored in your local SQLite DB."""
     conn = get_db_connection()
     movies = conn.execute("SELECT * FROM movies").fetchall()
     conn.close()
 
-    return jsonify([dict(row) for row in movies])
+    return jsonify({"results": [dict(row) for row in movies]})
 
 
 def search_local_movies():
-    """Search movies stored in local DB."""
-    query = request.args.get('q', '').strip()
+    query = request.args.get("q", "").lower().strip()
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    movies = cursor.execute(
-        "SELECT * FROM movies WHERE title LIKE ?",
-        (f"%{query}%",)
-    ).fetchall()
+    rows = cursor.execute("""
+        SELECT id, title, genre, description
+        FROM movies
+        WHERE LOWER(title) LIKE ? OR LOWER(genre) LIKE ?
+    """, (f"%{query}%", f"%{query}%")).fetchall()
 
     conn.close()
 
-    return jsonify([dict(row) for row in movies])
-
-
-# -------------------------
-# TMDB MOVIE FUNCTIONS
-# -------------------------
-
-def get_tmdb_movie(movie_id):
-    """Return a TMDB movie detail."""
-    try:
-        data = get_movie_detail(movie_id)
-
-        result = {
-            "id": data.get("id"),
-            "title": data.get("title"),
-            "overview": data.get("overview"),
-            "genres": [g["name"] for g in data.get("genres", [])],
-            "release_date": data.get("release_date"),
-            "runtime": data.get("runtime"),
-            "rating": data.get("vote_average"),
-            "poster": get_image_url(data.get("poster_path"), size="w500"),
-            "backdrop": get_image_url(data.get("backdrop_path"), size="original")
+    results = [
+        {
+            "id": row["id"],
+            "title": row["title"],
+            "genre": row["genre"],
+            "poster": "https://placehold.co/300x450?text=" + row["title"]
         }
+        for row in rows
+    ]
 
-        return jsonify(result)
+    return jsonify({"results": results})
 
-    except Exception as e:
-        return jsonify({"error": "Failed to fetch TMDB movie", "details": str(e)}), 500
+
+# -----------------------------
+# TMDB MOVIES
+# -----------------------------
+def get_tmdb_movie(movie_id):
+    data = get_movie_detail(movie_id)
+
+    return jsonify({
+        "id": data.get("id"),
+        "title": data.get("title"),
+        "overview": data.get("overview"),
+        "genres": [g["name"] for g in data.get("genres", [])],
+        "poster": get_image_url(data.get("poster_path"), "w500"),
+        "backdrop": get_image_url(data.get("backdrop_path"), "original")
+    })
 
 
 def search_tmdb_movies():
-    """Search movies using TMDB API."""
     query = request.args.get("q", "").strip()
+    data = tmdb_search(query)
 
-    if not query:
-        return jsonify({"results": []})
+    results = [
+        {
+            "id": m["id"],
+            "title": m["title"],
+            "poster": get_image_url(m.get("poster_path"), "w500")
+        }
+        for m in data.get("results", [])
+    ]
 
-    try:
-        data = tmdb_search(query)
+    return jsonify({"results": results})
 
-        results = []
-        for m in data.get("results", []):
-            results.append({
-                "id": m.get("id"),
-                "title": m.get("title"),
-                "poster": get_image_url(m.get("poster_path"), "w500"),
-                "overview": m.get("overview"),
-                "release_date": m.get("release_date")
-            })
+def get_movie_trailer(movie_id):
+    data = get_movie_videos(movie_id)
 
-        return jsonify({"results": results})
+    if "results" not in data:
+        return jsonify({"error": "No videos found"}), 404
 
-    except Exception as e:
-        return jsonify({"error": "TMDB search failed", "details": str(e)}), 500
+    # Filter for official YouTube trailers
+    for video in data["results"]:
+        if video["site"] == "YouTube" and video["type"] in ["Trailer", "Teaser"]:
+            return jsonify({"youtube_key": video["key"]})
+
+    # fallback: return first YouTube video
+    for video in data["results"]:
+        if video["site"] == "YouTube":
+            return jsonify({"youtube_key": video["key"]})
+
+    return jsonify({"error": "Trailer not available"}), 404
+

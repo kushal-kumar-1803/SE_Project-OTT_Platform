@@ -168,3 +168,88 @@ main{padding:28px 48px}
 .movie-section {
     margin-top: 40px;
 }
+
+.detail-hero {
+    position: relative;
+    height: 90vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+}
+
+.detail-hero .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+}
+
+.detail-wrapper {
+    position: relative;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    z-index: 2;
+}
+
+.detail-poster {
+    width: 280px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.6);
+}
+
+.detail-info {
+    max-width: 700px;
+}
+
+.detail-buttons button {
+    margin-right: 12px;
+}
+
+#trailerModal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.85);
+}
+
+#trailerFrame {
+    width: 800px;
+    height: 450px;
+}
+
+#closeTrailer {
+    position: absolute;
+    top: 40px;
+    right: 60px;
+    cursor: pointer;
+    color: white;
+    font-size: 40px;
+}
+
+.detail-hero {
+  padding: 30px;
+}
+
+.detail-container {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.detail-poster {
+  width: 280px;
+  border-radius: 8px;
+}
+
+.detail-meta {
+  flex: 1;
+}
+
+.detail-actions button {
+  margin-right: 12px;
+  margin-top: 15px;
+}
