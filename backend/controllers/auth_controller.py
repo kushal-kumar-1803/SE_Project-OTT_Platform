@@ -4,9 +4,10 @@ from backend.database.db_connection import get_db_connection
 from backend.services.jwt_services import generate_token
 import sqlite3
 
-# -----------------------------
+
+# ------------------------------------------------------
 # REGISTER USER
-# -----------------------------
+# ------------------------------------------------------
 def register_user():
     data = request.get_json()
 
@@ -25,14 +26,14 @@ def register_user():
 
     try:
         cursor.execute(
-            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-            (name, email, hashed_pw)
+            "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+            (name, email, hashed_pw, 'user')
         )
         conn.commit()
+
         return jsonify({"message": "User registered successfully"}), 201
 
     except sqlite3.IntegrityError:
-        # UNIQUE constraint failed: users.email
         return jsonify({"error": "Email already registered"}), 409
 
     except Exception as e:
@@ -42,13 +43,15 @@ def register_user():
         conn.close()
 
 
-# -----------------------------
+
+# ------------------------------------------------------
 # LOGIN USER
-# -----------------------------
+# ------------------------------------------------------
 def login_user():
     data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
+
+    email = data.get("email")
+    password = data.get("password")
 
     if not email or not password:
         return jsonify({"error": "Email and password required"}), 400
@@ -57,17 +60,27 @@ def login_user():
     cursor = conn.cursor()
 
     user = cursor.execute(
-        "SELECT * FROM users WHERE email = ?", (email,)
+        "SELECT * FROM users WHERE email = ?",
+        (email,)
     ).fetchone()
 
     conn.close()
 
-    if user and check_password_hash(user['password'], password):
-        token = generate_token(user['id'])
-        return jsonify({
-            "token": token,
-            "user_id": user['id'],
-            "message": "Login successful"
-        }), 200
+    # If user does not exist or password wrong → fail
+    if not user:
+        return jsonify({"error": "Invalid credentials"}), 401
 
-    return jsonify({"error": "Invalid credentials"}), 401
+    stored_hash = user["password"]
+
+    if not check_password_hash(stored_hash, password):
+        return jsonify({"error": "Invalid credentials"}), 401
+
+    # Generate JWT token
+    token = generate_token(user["id"])
+
+    return jsonify({
+        "message": "Login successful",
+        "token": token,
+        "user_id": user["id"],
+        "role": user["role"]
+    }), 200

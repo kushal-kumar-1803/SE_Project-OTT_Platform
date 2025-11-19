@@ -7,6 +7,9 @@ from backend.routes.movie_routes import movie_bp
 from backend.routes.subscription_routes import sub_bp
 from backend.routes.admin_routes import admin_bp
 
+# ----------------------------
+# Flask App Config
+# ----------------------------
 app = Flask(
     __name__,
     static_folder="../frontend",
@@ -14,20 +17,24 @@ app = Flask(
 )
 
 CORS(app)
-app.config['SECRET_KEY'] = "secret_key"
+app.config["SECRET_KEY"] = "secret_key"
 
-# DB Initialize
+# ----------------------------
+# Initialize DB
+# ----------------------------
 init_db()
 
-# Blueprints
+# ----------------------------
+# Register API Blueprints
+# ----------------------------
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(movie_bp, url_prefix="/movies")
 app.register_blueprint(sub_bp, url_prefix="/subscriptions")
-app.register_blueprint(admin_bp, url_prefix="/admin")
+app.register_blueprint(admin_bp, url_prefix="/admin-api")
 
-# --------------------------
-# Frontend Pages
-# --------------------------
+# ----------------------------
+# Frontend Routes
+# ----------------------------
 @app.route("/")
 def index():
     return send_from_directory("../frontend", "index.html")
@@ -44,18 +51,22 @@ def register():
 def movie_detail(movie_id):
     return send_from_directory("../frontend", "movie_detail.html")
 
-@app.route("/admin-panel")
-def admin_panel():
+@app.route("/admin")
+def admin():
     return send_from_directory("../frontend", "admin_panel.html")
 
-# Static Files
-@app.route('/assets/<path:filename>')
+# ----------------------------
+# Static file serving
+# ----------------------------
+@app.route("/assets/<path:filename>")
 def assets(filename):
     return send_from_directory("../frontend/assets", filename)
 
+# For any other file in frontend
 @app.route("/<path:filename>")
 def fallback(filename):
     return send_from_directory("../frontend", filename)
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(debug=True)
