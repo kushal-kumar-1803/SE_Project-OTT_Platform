@@ -1,9 +1,13 @@
 import sqlite3
+import os
 
-DB_NAME = "ott_platform.db"
+# Always point to backend/database/ott_platform.db
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "ott_platform.db")
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_NAME)
+    print("📌 USING DB:", DB_PATH)  # Debug line
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -26,7 +30,7 @@ def init_db():
         genre TEXT,
         description TEXT,
         video_url TEXT,
-        poster_url TEXT   -- ⭐ NEW COLUMN ⭐
+        poster_url TEXT
     );
 
     CREATE TABLE IF NOT EXISTS subscriptions (
