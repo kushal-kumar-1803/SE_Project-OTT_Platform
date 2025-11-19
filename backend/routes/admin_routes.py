@@ -1,7 +1,8 @@
 # ==========================================
 # FILE 1: backend/routes/admin_routes.py
 # ==========================================
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
+from backend.database.db_connection import get_db_connection
 from backend.controllers.admin_controller import (
     add_movie,
     update_movie,
@@ -30,3 +31,26 @@ def delete_movie_route(movie_id):
 @admin_bp.route("/movies/update/<int:movie_id>", methods=["PUT"])
 def update_movie_route(movie_id):
     return update_movie(movie_id)
+
+@admin_bp.route("/approve-payment", methods=["POST"])
+def approve_payment():
+    data = request.get_json()
+    payment_id = data["payment_id"]
+    user_id = data["user_id"]
+    plan = data["plan"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Update subscription table to active
+    cursor.execute("""
+        UPDATE subscriptions
+        SET status = 'active'
+        WHERE id = ?
+    """, (payment_id,))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"success": True})
+

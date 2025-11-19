@@ -33,14 +33,29 @@ def init_db():
         poster_url TEXT
     );
 
-    CREATE TABLE IF NOT EXISTS subscriptions (
+     CREATE TABLE IF NOT EXISTS subscriptions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         plan TEXT,
+        status TEXT DEFAULT 'pending',
         start_date TEXT,
         FOREIGN KEY(user_id) REFERENCES users(id)
     );
+
+                        
+    CREATE TABLE IF NOT EXISTS payment_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    plan TEXT,
+    amount INTEGER,
+    status TEXT DEFAULT 'pending',
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
     """)
+
 
     conn.commit()
     conn.close()
+
+    
