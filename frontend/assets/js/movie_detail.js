@@ -1,6 +1,9 @@
 console.log("MOVIE DETAIL JS LOADED");
 
-// -------- Helpers --------
+// ============================
+// HELPER FUNCTIONS
+// ============================
+
 function getMovieId() {
     const parts = window.location.pathname.split("/");
     const id = parts.pop() || parts.pop(); // handles trailing slash
@@ -17,12 +20,38 @@ async function fetchJSON(url) {
     }
 }
 
-// -------- Main Logic --------
+// NEW — Check subscription via backend API
+async function checkSubscription() {
+    const userId = localStorage.getItem("user_id");
+
+    if (!userId) {
+        console.warn("User not logged in, redirecting to login.");
+        window.location.href = "/login";
+        return false;
+    }
+
+    try {
+        const res = await fetch(`/subscriptions/status/${userId}`);
+        const data = await res.json();
+
+        console.log("Subscription API Response:", data);
+        return data.subscribed === true;
+
+    } catch (err) {
+        console.error("Subscription check error:", err);
+        return false;
+    }
+}
+
+
+// ============================
+// MAIN LOGIC
+// ============================
 (async () => {
     const id = getMovieId();
     console.log("Movie ID:", id);
 
-    // Load Movie Details
+    // Load Movie Detail
     const detail = await fetchJSON(`/movies/${id}`);
     console.log("Movie Detail:", detail);
 
@@ -31,13 +60,13 @@ async function fetchJSON(url) {
         return;
     }
 
-    // Safe-fill DOM elements
+    // --- SAFE DOM SETTER ---
     const setText = (id, value) => {
         const el = document.getElementById(id);
         if (el) el.innerText = value || "";
     };
 
-    // Fill Text Data
+    // Fill Movie Data
     setText("detail-title", detail.title);
     setText("detail-genres", (detail.genres || []).join(", "));
     setText("detail-overview", detail.overview);
@@ -48,57 +77,63 @@ async function fetchJSON(url) {
     const posterEl = document.getElementById("detail-poster");
     if (posterEl) posterEl.src = detail.poster;
 
-    // Backdrop Fix
+    // Backdrop
     const backdropEl = document.getElementById("detail-backdrop");
     if (backdropEl) {
         backdropEl.style.backgroundImage = `url(${detail.backdrop || detail.poster})`;
     }
 
-    // -------- PLAY TRAILER --------
+
+    // ============================
+    // PLAY TRAILER
+    // ============================
     const trailerBtn = document.getElementById("playTrailerBtn");
     if (trailerBtn) {
         trailerBtn.onclick = async () => {
-            console.log("Trailer button clicked!");
-
             const trailer = await fetchJSON(`/movies/trailer/${id}`);
-            console.log("Trailer response:", trailer);
 
             if (!trailer || !trailer.youtube_key) {
-                alert("Trailer not available for this movie.");
+                alert("Trailer not available.");
                 return;
             }
 
-            const url = `https://www.youtube.com/watch?v=${trailer.youtube_key}`;
-            console.log("Opening Trailer URL:", url);
-
-            window.open(url, "_blank");
+            window.open(`https://www.youtube.com/watch?v=${trailer.youtube_key}`, "_blank");
         };
     }
 
-    // -------- PLAY MOVIE --------
-    const playMovieBtn = document.getElementById("playMovieBtn");
-    if (playMovieBtn) {
-        playMovieBtn.onclick = () => {
-            const subscribed = localStorage.getItem("is_subscribed");
-            console.log("Subscription Status:", subscribed);
 
-            if (subscribed !== "1") {
+    // ============================
+    // PLAY MOVIE  (Subscription Check)
+    // ============================
+    const playMovieBtn = document.getElementById("playMovieBtn");
+
+    if (playMovieBtn) {
+        playMovieBtn.onclick = async () => {
+            console.log("Checking subscription...");
+
+            const allowed = await checkSubscription();
+            console.log("Subscription Allowed:", allowed);
+
+            if (!allowed) {
                 alert("Please subscribe to watch full movies.");
                 window.location.href = "/subscribe";
                 return;
             }
 
+            // SUCCESS → Play movie
             window.location.href = `/movies/stream/${id}`;
         };
     }
 
-    // -------- WATCHLIST --------
+
+    // ============================
+    // WATCHLIST FEATURE
+    // ============================
     const watchlistBtn = document.getElementById("watchlistBtn");
+
     if (watchlistBtn) {
         watchlistBtn.onclick = () => {
             let list = JSON.parse(localStorage.getItem("watchlist") || "[]");
-
-            // Convert id to string for consistency
             const movieId = String(id);
 
             if (!list.includes(movieId)) {
@@ -114,9 +149,9 @@ async function fetchJSON(url) {
             localStorage.setItem("watchlist", JSON.stringify(list));
         };
 
-        // Pre-set watchlist button text
-        const userList = JSON.parse(localStorage.getItem("watchlist") || "[]");
-        if (userList.includes(String(id))) {
+        // Initialize button text
+        const stored = JSON.parse(localStorage.getItem("watchlist") || "[]");
+        if (stored.includes(String(id))) {
             watchlistBtn.innerText = "Remove from Watchlist";
         }
     }

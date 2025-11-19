@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Choose Your Plan</title>
+    <style>
+        body { font-family: Arial; background: #f5f5f5; text-align: center; margin-top: 40px; }
+
+        h1 { font-size: 32px; margin-bottom: 20px; }
+
+        .plans {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .plan-card {
+            background: white;
+            padding: 25px;
+            width: 260px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .plan-card:hover {
+            transform: scale(1.05);
+        }
+
+        .price {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .choose-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Select Your Subscription Plan</h1>
+
+<div class="plans">
+
+    <div class="plan-card">
+        <h2>Basic</h2>
+        <p class="price">₹199 / month</p>
+        <button class="choose-btn" onclick="goToPayment('Basic',199)">Choose Plan</button>
+    </div>
+
+    <div class="plan-card">
+        <h2>Standard</h2>
+        <p class="price">₹399 / month</p>
+        <button class="choose-btn" onclick="goToPayment('Standard',399)">Choose Plan</button>
+    </div>
+
+    <div class="plan-card">
+        <h2>Premium</h2>
+        <p class="price">₹599 / month</p>
+        <button class="choose-btn" onclick="goToPayment('Premium',599)">Choose Plan</button>
+    </div>
+
+    <div class="plan-card">
+        <h2>Ultra</h2>
+        <p class="price">₹799 / month</p>
+        <button class="choose-btn" onclick="goToPayment('Ultra',799)">Choose Plan</button>
+    </div>
+
+</div>
+
+<script>
+function goToPayment(plan, price) {
+    window.location.href = `/payment?plan=${plan}&price=${price}`;
+}
+</script>
+
+</body>
+</html>

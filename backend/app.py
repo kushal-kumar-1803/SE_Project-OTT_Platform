@@ -6,6 +6,7 @@ from backend.routes.auth_routes import auth_bp
 from backend.routes.movie_routes import movie_bp
 from backend.routes.subscription_routes import sub_bp
 from backend.routes.admin_routes import admin_bp
+from backend.routes.payment_routes import payment_bp
 
 # ----------------------------
 # Flask App Config
@@ -32,6 +33,7 @@ app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(movie_bp, url_prefix="/movies")
 app.register_blueprint(sub_bp, url_prefix="/subscriptions")
 app.register_blueprint(admin_bp, url_prefix="/admin-api")
+app.register_blueprint(payment_bp, url_prefix="/payments")
 
 
 # -----------------------------
@@ -86,6 +88,15 @@ def fallback_html(filename):
         return send_from_directory("../frontend", filename)
     except:
         return send_from_directory("../frontend", "index.html")
+    
+@app.route("/subscribe")
+def subscribe_page():
+    return send_from_directory("../frontend", "subscribe.html")
+
+@app.route("/payment")
+def payment_page():
+    return send_from_directory("../frontend", "payment.html")
+
 
 
 
