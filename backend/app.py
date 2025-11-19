@@ -7,6 +7,9 @@ from backend.routes.movie_routes import movie_bp
 from backend.routes.subscription_routes import sub_bp
 from backend.routes.admin_routes import admin_bp
 
+# ----------------------------
+# Flask App Config
+# ----------------------------
 app = Flask(
     __name__,
     static_folder="../frontend/assets",
@@ -16,6 +19,14 @@ app = Flask(
 CORS(app)
 app.config["SECRET_KEY"] = "secret_key"
 
+# ----------------------------
+# Initialize DB
+# ----------------------------
+init_db()
+
+# ----------------------------
+# Register API Blueprints
+# ----------------------------
 # Initialize DB
 init_db()
 
@@ -23,7 +34,7 @@ init_db()
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(movie_bp, url_prefix="/movies")
 app.register_blueprint(sub_bp, url_prefix="/subscriptions")
-app.register_blueprint(admin_bp, url_prefix="/admin")
+app.register_blueprint(admin_bp, url_prefix="/admin-api")
 
 
 # -----------------------------
@@ -72,5 +83,6 @@ def fallback_html(filename):
         return send_from_directory("../frontend", "index.html")
 
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(debug=True)

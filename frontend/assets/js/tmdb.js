@@ -18,25 +18,40 @@ async function tmdbFetch(url) {
     return res.json();
 }
 
-// Load Hero Banner
+// Load Hero Banner (only if no local movies)
 async function loadHeroBanner() {
-    const trending = await tmdbFetch(CATEGORIES["Trending Now"]);
-    const movie = trending.results[0];
+    // Check if local movies have been loaded and if they exist
+    // Wait a bit for local movies to load first
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // Check if hero was already updated by local movies
+    const heroTitle = document.getElementById("heroTitle");
+    if (heroTitle && heroTitle.innerText !== "Featured") {
+        // Hero already updated by local movies, skip TMDB
+        return;
+    }
 
-    const hero = document.getElementById("hero");
+    try {
+        const trending = await tmdbFetch(CATEGORIES["Trending Now"]);
+        const movie = trending.results[0];
 
-    hero.style.backgroundImage =
-        `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
+        const hero = document.getElementById("hero");
 
-    document.getElementById("heroTitle").innerText = movie.title;
-    document.getElementById("heroDesc").innerText =
-        movie.overview.substring(0, 150) + "...";
+        hero.style.backgroundImage =
+            `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`;
 
-    document.getElementById("playHero").onclick =
-        () => window.location.href = "/movie/" + movie.id;
+        document.getElementById("heroTitle").innerText = movie.title;
+        document.getElementById("heroDesc").innerText =
+            movie.overview.substring(0, 150) + "...";
 
-    document.getElementById("moreHero").onclick =
-        () => window.location.href = "/movie/" + movie.id;
+        document.getElementById("playHero").onclick =
+            () => window.location.href = "/movie/" + movie.id;
+
+        document.getElementById("moreHero").onclick =
+            () => window.location.href = "/movie/" + movie.id;
+    } catch (error) {
+        console.error("Error loading TMDB hero:", error);
+    }
 }
 
 // Create movie card
