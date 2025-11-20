@@ -74,7 +74,7 @@ def login_user():
         "message": "Login successful",
         "token": token,
         "user_id": user["id"],
-        "role": user.get("role", "user")
+        "role": user["role"] if user["role"] else "user"
     }), 200
 
 
