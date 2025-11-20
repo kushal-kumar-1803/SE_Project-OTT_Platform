@@ -10,10 +10,29 @@
 
 <header class="site-header">
     <div class="logo">OTT</div>
+
     <div class="header-actions">
         <input id="searchInput" placeholder="Search movies..." />
+
+        <a id="homeLink" href="/" style="display: none;">Home</a>
         <a id="loginLink" href="/login">Login</a>
         <a id="adminLink" href="/admin">Admin</a>
+
+        <!-- ⭐ SUBSCRIBE BUTTON (ONLY for new users) -->
+        <button id="subscribeBtn"
+                style="
+                    display:none;
+                    background:#ff0000;
+                    color:white;
+                    padding:10px 20px;
+                    border:none;
+                    border-radius:5px;
+                    cursor:pointer;
+                    margin-right:10px;">
+            Subscribe
+        </button>
+
+        <button id="logoutBtn" style="display: none;">Logout</button>
     </div>
 </header>
 
@@ -41,10 +60,81 @@
     <p>OTT Platform — Demo</p>
 </footer>
 
+<script src="assets/js/local_movies.js"></script>
 <script src="assets/js/tmdb.js"></script>
+<script src="assets/js/header.js"></script>
 <script src="assets/js/search.js"></script>
 
+<script>
+/* -------------------------------------------------
+   1. CHECK IF USER IS LOGGED IN
+--------------------------------------------------- */
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("user_id");
+const role   = localStorage.getItem("role");
 
+if (token) {
+    document.getElementById("loginLink").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline-block";
+    document.getElementById("homeLink").style.display = "inline-block";
+} else {
+    // Not logged in → hide subscribe button
+    document.getElementById("subscribeBtn").style.display = "none";
+}
+
+/* -------------------------------------------------
+   2. CHECK SUBSCRIPTION STATUS
+--------------------------------------------------- */
+async function checkSubscriptionStatus() {
+    if (!userId) return;
+
+    try {
+        const res = await fetch(`http://127.0.0.1:5000/subscriptions/status/${userId}`);
+        const data = await res.json();
+
+        if (data.subscribed === true) {
+            console.log("User is subscribed:", data.plan);
+            document.getElementById("subscribeBtn").style.display = "none";
+        } else {
+            console.log("User NOT subscribed");
+            document.getElementById("subscribeBtn").style.display = "inline-block";
+        }
+
+    } catch (err) {
+        console.error("Subscription check failed:", err);
+    }
+}
+
+checkSubscriptionStatus();
+
+/* -------------------------------------------------
+   3. SUBSCRIBE BUTTON CLICK
+--------------------------------------------------- */
+document.getElementById("subscribeBtn").addEventListener("click", () => {
+    window.location.href = "/page/subscribe.html"; // fake payment page
+});
+
+/* -------------------------------------------------
+   4. BLOCK PLAY BUTTON FOR UNSUBSCRIBED USERS
+--------------------------------------------------- */
+document.getElementById("playHero").addEventListener("click", async () => {
+    if (!userId) {
+        alert("Please login first!");
+        window.location.href = "/login";
+        return;
+    }
+
+    const res = await fetch(`http://127.0.0.1:5000/subscriptions/status/${userId}`);
+    const data = await res.json();
+
+    if (!data.subscribed) {
+        alert("Please subscribe to watch content!");
+        return;
+    }
+
+    alert("Playing movie...");
+});
+</script>
 
 </body>
 </html>

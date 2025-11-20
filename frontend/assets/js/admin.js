@@ -1,62 +1,111 @@
-const API_BASE_ADMIN = "http://127.0.0.1:5000";
+// =========================
+//  API BASE
+// =========================
+const API_BASE = "http://127.0.0.1:5000";
 
-function getAuthHeaders(){
-  const token = localStorage.getItem("token");
-  return token ? { "Authorization": `Bearer ${token}`, "Content-Type":"application/json" } : { "Content-Type":"application/json" };
-}
 
-async function loadAdminMovies(){
-  const r = await fetch(`${API_BASE_ADMIN}/movies/all`);
-  const movies = await r.json();
-  const container = document.getElementById("adminMovies");
-  container.innerHTML = "";
-  movies.forEach(m => {
-    const el = document.createElement("div");
-    el.className = "admin-movie";
-    el.innerHTML = `<div><strong>${m.title}</strong> <div style="color:#999">${m.genre}</div></div>
-    <div>
-      <button class="del" data-id="${m.id}">Delete</button>
-    </div>`;
-    container.appendChild(el);
-  });
-
-  // attach delete handlers
-  document.querySelectorAll("#adminMovies .del").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const id = btn.dataset.id;
-      if (!confirm("Delete movie #" + id + "?")) return;
-      const res = await fetch(`${API_BASE_ADMIN}/admin/delete/${id}`, {
-        method: "DELETE",
-        headers: getAuthHeaders()
-      });
-      const data = await res.json();
-      alert(JSON.stringify(data));
-      loadAdminMovies();
+// =========================
+//  LOGOUT
+// =========================
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.clear();
+        alert("Logged out!");
+        window.location.href = "/login";
     });
-  });
 }
 
-document.getElementById("addMovieForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const title = document.getElementById("title").value;
-  const genre = document.getElementById("genre").value;
-  const description = document.getElementById("description").value;
-  const video_url = document.getElementById("video_url").value;
 
-  const res = await fetch(`${API_BASE_ADMIN}/admin/add`, {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify({ title, genre, description, video_url })
-  });
-  const data = await res.json();
-  alert(JSON.stringify(data));
-  loadAdminMovies();
-});
+// =========================
+//  LOAD MOVIES
+// =========================
+async function loadMovies() {
+    const movieList = document.getElementById("movieList");
+    if (!movieList) return;
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = "/";
-});
+    movieList.innerHTML = "<p style='color:#bbb;'>Loading...</p>";
 
-// init admin page
-loadAdminMovies();
+    const res = await fetch(`${API_BASE}/movies/all`);
+    const movies = await res.json();
+
+    movieList.innerHTML = "";
+
+    movies.forEach(movie => {
+        movieList.innerHTML += `
+            <div class="admin-movie-card">
+                <img src="${movie.poster_url}">
+                <h3>${movie.title}</h3>
+                <p>${movie.genre}</p>
+                <button onclick="openEditModal(${movie.id})">Edit</button>
+            </div>
+        `;
+    });
+}
+
+
+// =========================
+//  LOAD PENDING SUBSCRIPTIONS
+// =========================
+async function loadPayments() {
+    const tableBody = document.getElementById("paymentBody");
+    if (!tableBody) return;
+
+    tableBody.innerHTML = `
+        <tr><td colspan="5" style="text-align:center;color:#bbb;">Loading...</td></tr>
+    `;
+
+    const res = await fetch(`${API_BASE}/subscriptions/pending`);
+    const data = await res.json();
+
+    console.log("Pending:", data);
+
+    tableBody.innerHTML = "";
+
+    if (!data.length) {
+        tableBody.innerHTML = `
+            <tr><td colspan="5" style="text-align:center;color:#bbb;">No pending subscriptions</td></tr>
+        `;
+        return;
+    }
+
+    data.forEach(sub => {
+        tableBody.innerHTML += `
+            <tr>
+                <td>${sub.user_id}</td>
+                <td>${sub.plan}</td>
+                <td>₹${sub.plan === "Standard" ? 299 : sub.plan === "Premium" ? 499 : 799}</td>
+                <td>${sub.status}</td>
+                <td>
+                    <button class="approve-btn" onclick="approvePayment(${sub.id})">
+                        Approve
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+
+// =========================
+//  APPROVE SUBSCRIPTION
+// =========================
+window.approvePayment = async function (subId) {
+    const res = await fetch(`${API_BASE}/subscriptions/approve/${subId}`, {
+        method: "PUT"
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        alert("Subscription Approved!");
+        loadPayments();
+    } else {
+        alert("Failed: " + data.error);
+    }
+};
+
+
+// INIT
+if (document.getElementById("movieList")) loadMovies();
+if (document.getElementById("paymentBody")) loadPayments();

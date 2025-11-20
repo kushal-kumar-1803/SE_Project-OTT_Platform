@@ -29,3 +29,36 @@ def get_subscriptions():
     subs = cursor.execute("SELECT * FROM subscriptions").fetchall()
     conn.close()
     return jsonify([dict(row) for row in subs])
+
+def check_subscription(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    sub = cursor.execute(
+        "SELECT * FROM subscriptions WHERE user_id = ?", (user_id,)
+    ).fetchone()
+
+    conn.close()
+
+    if sub:
+        return {"subscribed": True, "plan": sub["plan"]}
+    else:
+        return {"subscribed": False}
+
+def activate_subscription():
+    data = request.get_json()
+    user_id = data.get("user_id")
+    plan = data.get("plan")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "INSERT INTO subscriptions (user_id, plan, start_date) VALUES (?, ?, date('now'))",
+        (user_id, plan)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"success": True})
