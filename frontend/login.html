@@ -23,50 +23,50 @@
     <p>Don't have an account? <a href="/register">Register</a></p>
   </div>
 
-  <!-- PUT SCRIPT AT BOTTOM ALWAYS -->
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-      const emailValue = document.getElementById("email").value;
-      const passwordValue = document.getElementById("password").value;
+  const emailValue = document.getElementById("email").value;
+  const passwordValue = document.getElementById("password").value;
 
-      try {
-        const response = await fetch("/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: emailValue,
-            password: passwordValue
-          })
-        });
-
-        const data = await response.json();
-        console.log("LOGIN RESPONSE:", data);
-
-        if (data.token) {
-          // Save JWT token + role in browser (needed for admin gate)
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("role", data.role || "user");
-
-          alert("Login Successful!");
-
-          // Redirect admins straight to the admin panel
-          if ((data.role || "").toLowerCase() === "admin") {
-            window.location.replace("http://127.0.0.1:5000/admin");
-          } else {
-            window.location.replace("http://127.0.0.1:5000/");
-          }
-        } else {
-          alert("Error: " + data.error);
-        }
-
-      } catch (err) {
-        console.error("JS Error:", err);
-        alert("Something went wrong!");
-      }
+  try {
+    const response = await fetch("http://127.0.0.1:5000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: emailValue,
+        password: passwordValue
+      })
     });
-  </script>
 
+    const data = await response.json();
+    console.log("LOGIN RESPONSE:", data);
+
+    if (data.error) {
+      alert("Error: " + data.error);
+      return;
+    }
+
+    // ⭐ Save correct user_id coming from backend
+    localStorage.setItem("user_id", data.user_id);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.role || "user");
+
+    alert("Login Successful!");
+
+    // redirect based on role
+    if ((data.role || "").toLowerCase() === "admin") {
+      window.location.replace("/admin");
+    } else {
+      window.location.replace("/");
+    }
+
+  } catch (error) {
+    console.error("Login Error:", error);
+    alert("Something went wrong!");
+  }
+});
+</script>
 </body>
 </html>

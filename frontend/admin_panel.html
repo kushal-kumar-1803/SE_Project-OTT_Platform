@@ -5,8 +5,23 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Panel</title>
   <link rel="stylesheet" href="assets/css/admin.css" />
+  <style>
+    table { width: 100%; border-collapse: collapse; margin-top: 25px; }
+    table th, table td { padding: 12px; border: 1px solid #ddd; }
+    table th { background: #f0f0f0; }
+    .approve-btn {
+      background: green;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
+
   <header class="admin-header">
     <div class="logo">OTT Admin Panel</div>
     <div class="header-actions">
@@ -17,7 +32,7 @@
 
   <main class="admin-main">
 
-    <!-- ADD MOVIE SECTION -->
+    <!-- ADD MOVIE -->
     <section class="admin-section add-movie">
       <h2>Add New Movie</h2>
       <form id="addMovieForm">
@@ -30,56 +45,34 @@
       </form>
     </section>
 
-    <!-- MOVIE LIST SECTION -->
+    <!-- MOVIES -->
     <section class="admin-section movie-list">
       <h2>All Movies</h2>
       <div id="movieList" class="movie-grid"></div>
     </section>
 
+    <!-- SUBSCRIPTIONS -->
+    <section class="admin-section payments">
+      <h2>Pending Subscriptions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Plan</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Approve</th>
+          </tr>
+        </thead>
+
+        <tbody id="paymentBody"></tbody>
+      </table>
+    </section>
+
   </main>
 
-  <!-- EDIT MOVIE MODAL -->
-  <div id="editMovieModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Edit Movie</h2>
-        <span class="close-modal">&times;</span>
-      </div>
-      <form id="editMovieForm">
-        <input type="hidden" id="edit_movie_id" />
-        <input id="edit_title" placeholder="Title" required />
-        <input id="edit_genre" placeholder="Genre" required />
-        <input id="edit_video_url" placeholder="Video URL" required />
-        <input id="edit_poster_url" placeholder="Poster Image URL" />
-        <textarea id="edit_description" placeholder="Description" required></textarea>
-        <div class="modal-actions">
-          <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
-          <button type="submit">Update Movie</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
+  <!-- ONLY THIS SCRIPT ALLOWED -->
   <script src="assets/js/admin.js"></script>
-
-  <!-- ADMIN PROTECTION -->
-  <script>
-    // Check if user is admin before allowing access
-    const role = localStorage.getItem("role");
-    const token = localStorage.getItem("token");
-
-    if (!token || role !== "admin") {
-      alert("Access denied! Admin privileges required.");
-      window.location.href = "/login";
-    }
-
-    // Logout functionality
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.clear();
-      alert("Logged out successfully!");
-      window.location.href = "/login";
-    });
-  </script>
 
 </body>
 </html>
