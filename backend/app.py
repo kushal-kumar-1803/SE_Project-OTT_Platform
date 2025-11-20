@@ -20,6 +20,17 @@ app = Flask(
 CORS(app)
 app.config["SECRET_KEY"] = "secret_key"
 
+# EMAIL CONFIG
+app.config.update(
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USERNAME="mdsadatullah97@gmail.com",  # Your Gmail address
+    MAIL_PASSWORD="gagy oayf vtrv upvz"  # Gmail App Password
+)
+
+mail.init_app(app)
+
 # ----------------------------
 # Initialize DB
 # ----------------------------
@@ -51,6 +62,10 @@ def login_page():
 @app.route("/register")
 def register_page():
     return send_from_directory("../frontend", "register.html")
+
+@app.route("/forgot")
+def forgot_page():
+    return send_from_directory("../frontend", "forgot.html")
 
 @app.route("/movie/<int:movie_id>")
 def movie_detail(movie_id):

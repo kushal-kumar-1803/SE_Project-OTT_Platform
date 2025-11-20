@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - OTT Platform</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
 </head>
+
 <body>
 
 <div class="form-container">
@@ -36,14 +38,19 @@ document.getElementById("registerForm").addEventListener("submit", (e) => {
     .then(r => r.json())
     .then(data => {
         if (data.message) {
-            alert("Registration successful!");
-            window.location.href = "/login";
+          alert("Registration Successful! Please login.");
+          window.location.href = "/login";
         } else {
-            alert("Error: " + data.error);
+          alert("Error: " + (data.error || "Registration failed"));
         }
+
+      } catch (err) {
+        console.error("JS Error:", err);
+        alert("Something went wrong!");
+      }
     });
-});
-</script>
+  </script>
 
 </body>
 </html>
+
