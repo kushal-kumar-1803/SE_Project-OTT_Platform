@@ -102,7 +102,7 @@ def forgot_password():
 
     msg = Message(
         subject="OTT Password Reset Code",
-        sender="yourgmail@gmail.com",
+        sender="mdsadatullah97@gmail.com",
         recipients=[email],
         body=f"Your OTP is: {otp}\nValid for 10 minutes."
     )

@@ -25,8 +25,8 @@ app.config.update(
     MAIL_SERVER="smtp.gmail.com",
     MAIL_PORT=587,
     MAIL_USE_TLS=True,
-    MAIL_USERNAME="yourgmail@gmail.com",
-    MAIL_PASSWORD="your_app_password"
+    MAIL_USERNAME="mdsadatullah97@gmail.com",  # Your Gmail address
+    MAIL_PASSWORD="your_16_char_app_password"  # Replace with your App Password from Step 1
 )
 
 mail.init_app(app)
