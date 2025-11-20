@@ -35,10 +35,11 @@ def register_user():
 
     try:
         cur.execute(
-            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
-            (name, email, hashed_pw)
+            "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+            (name, email, hashed_pw, 'user')
         )
         conn.commit()
+
         return jsonify({"message": "User registered successfully"}), 201
 
     except sqlite3.IntegrityError:
@@ -48,26 +49,33 @@ def register_user():
         conn.close()
 
 
-# LOGIN
+# LOGIN USER
 def login_user():
     data = request.get_json()
     email = data.get("email")
     password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"error": "Email and password required"}), 400
 
     conn = get_db_connection()
     cur = conn.cursor()
     user = cur.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
     conn.close()
 
-    if user and check_password_hash(user["password"], password):
-        token = generate_token(user["id"])
-        return jsonify({
-            "message": "Login successful",
-            "token": token,
-            "user_id": user["id"]
-        }), 200
+    if not user:
+        return jsonify({"error": "Invalid credentials"}), 401
 
-    return jsonify({"error": "Invalid credentials"}), 401
+    if not check_password_hash(user["password"], password):
+        return jsonify({"error": "Invalid credentials"}), 401
+
+    token = generate_token(user["id"])
+    return jsonify({
+        "message": "Login successful",
+        "token": token,
+        "user_id": user["id"],
+        "role": user.get("role", "user")
+    }), 200
 
 
 # FORGOT PASSWORD (SEND OTP)
@@ -117,11 +125,9 @@ def reset_password():
     if not user:
         return jsonify({"error": "Invalid email"}), 404
 
-    # OTP WRONG
     if user["reset_token"] != otp:
         return jsonify({"error": "Invalid OTP"}), 400
 
-    # OTP EXPIRED
     if datetime.utcnow() > datetime.fromisoformat(user["reset_expiry"]):
         return jsonify({"error": "OTP expired"}), 400
 

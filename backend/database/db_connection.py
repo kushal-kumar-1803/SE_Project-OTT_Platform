@@ -7,7 +7,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -28,7 +27,8 @@ def init_db():
         title TEXT,
         genre TEXT,
         description TEXT,
-        video_url TEXT
+        video_url TEXT,
+        poster_url TEXT   -- ⭐ NEW COLUMN ⭐
     );
 
     CREATE TABLE IF NOT EXISTS subscriptions (

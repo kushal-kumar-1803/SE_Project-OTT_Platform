@@ -45,9 +45,18 @@
         console.log("LOGIN RESPONSE:", data);
 
         if (data.token) {
+          // Save JWT token + role in browser (needed for admin gate)
           localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.role || "user");
+
           alert("Login Successful!");
-          window.location.href = "/";
+
+          // Redirect admins straight to the admin panel
+          if ((data.role || "").toLowerCase() === "admin") {
+            window.location.replace("http://127.0.0.1:5000/admin");
+          } else {
+            window.location.replace("http://127.0.0.1:5000/");
+          }
         } else {
           alert("Error: " + data.error);
         }
