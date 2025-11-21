@@ -55,7 +55,7 @@ def init_db():
     status TEXT DEFAULT 'pending',
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
-
+    """)
 
     # -------------------------
     # Profiles (multi-profile)
