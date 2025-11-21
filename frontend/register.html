@@ -43,11 +43,10 @@ document.getElementById("registerForm").addEventListener("submit", (e) => {
         } else {
           alert("Error: " + (data.error || "Registration failed"));
         }
-
-      } catch (err) {
+    })
+    .catch(err => {
         console.error("JS Error:", err);
         alert("Something went wrong!");
-      }
     });
   </script>
 
