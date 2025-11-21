@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            text-align: center; 
+            margin-top: 80px; 
+        }
+        .card {
+            display: inline-block;
+            padding: 35px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            width: 350px;
+        }
+        button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>Payment</h2>
+        <p id="planName"></p>
+        <p id="planPrice" style="font-size: 22px; font-weight:bold;"></p>
+
+        <button id="payBtn">Pay Securely</button>
+    </div>
+
+<script>
+console.log("=== PAYMENT PAGE LOADED ===");
+
+// Read query parameters
+const urlParams = new URLSearchParams(window.location.search);
+const plan = urlParams.get("plan");
+const price = urlParams.get("price");
+
+// Display values
+document.getElementById("planName").innerText = "Plan: " + plan;
+document.getElementById("planPrice").innerText = "Amount: ₹" + price;
+
+// PAY BUTTON
+document.getElementById("payBtn").addEventListener("click", async () => {
+    console.log("Pay button clicked");
+
+    const userId = localStorage.getItem("user_id");
+    console.log("User ID:", userId);
+
+    if (!userId) {
+        alert("Please login first!");
+        window.location.href = "/login";
+        return;
+    }
+
+    console.log("Sending request to backend...");
+
+    try {
+        const response = await fetch("/subscriptions/activate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                user_id: userId,
+                plan: plan
+            })
+        });
+
+        const result = await response.json();
+        console.log("Backend Response:", result);
+
+        if (result.success) {
+            alert("Payment successful! Waiting for admin approval.");
+            window.location.href = "/";
+        } else {
+            alert("Error: " + (result.error || "Unknown error"));
+        }
+
+    } catch (err) {
+        console.error("Payment ERROR:", err);
+        alert("Something went wrong. Check console.");
+    }
+});
+</script>
+
+</body>
+</html>

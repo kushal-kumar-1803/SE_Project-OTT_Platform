@@ -9,6 +9,13 @@ from backend.routes.admin_routes import admin_bp
 from backend.routes.user_routes import user_bp
 from backend.extensions import mail
 
+# Check if payment_routes exists, if so import it
+try:
+    from backend.routes.payment_routes import payment_bp
+    has_payments = True
+except ImportError:
+    has_payments = False
+
 # ----------------------------
 # Flask App Config
 # ----------------------------
@@ -46,6 +53,9 @@ app.register_blueprint(movie_bp, url_prefix="/movies")
 app.register_blueprint(sub_bp, url_prefix="/subscriptions")
 app.register_blueprint(admin_bp, url_prefix="/admin-api")
 app.register_blueprint(user_bp, url_prefix="/user")
+
+if has_payments:
+    app.register_blueprint(payment_bp, url_prefix="/payments")
 
 
 # -----------------------------
@@ -104,6 +114,15 @@ def fallback_html(filename):
         return send_from_directory("../frontend", filename)
     except:
         return send_from_directory("../frontend", "index.html")
+    
+@app.route("/subscribe")
+def subscribe_page():
+    return send_from_directory("../frontend", "subscribe.html")
+
+@app.route("/payment")
+def payment_page():
+    return send_from_directory("../frontend", "payment.html")
+
 
 
 
