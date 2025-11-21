@@ -6,6 +6,7 @@ from backend.routes.auth_routes import auth_bp
 from backend.routes.movie_routes import movie_bp
 from backend.routes.subscription_routes import sub_bp
 from backend.routes.admin_routes import admin_bp
+from backend.routes.user_routes import user_bp
 from backend.extensions import mail
 
 # ----------------------------
@@ -44,6 +45,7 @@ app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(movie_bp, url_prefix="/movies")
 app.register_blueprint(sub_bp, url_prefix="/subscriptions")
 app.register_blueprint(admin_bp, url_prefix="/admin-api")
+app.register_blueprint(user_bp, url_prefix="/user")
 
 
 # -----------------------------
