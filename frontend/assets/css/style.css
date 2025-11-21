@@ -256,3 +256,30 @@ main{padding:28px 48px}
   margin-right: 12px;
   margin-top: 15px;
 }
+
+/* ---- PROFILE AVATAR GRID ---- */
+.avatar-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.avatar-grid img {
+    width: 120px;       /* smaller size */
+    height: 120px;
+    border-radius: 12px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease, outline 0.2s ease;
+    border: 3px solid transparent;
+}
+
+.avatar-grid img:hover {
+    transform: scale(1.05);
+}
+
+.avatar-grid img.selected {
+    border: 3px solid #e50914;
+    transform: scale(1.08);
+}

@@ -1,9 +1,10 @@
 import sqlite3
 import os
 
-# Always point to backend/database/ott_platform.db
+# Database path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "ott_platform.db")
+
 
 def get_db_connection():
     print("📌 USING DB:", DB_PATH)  # Debug line
@@ -15,6 +16,7 @@ def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # existing tables
     cursor.executescript("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,8 +56,29 @@ def init_db():
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
-    """)
 
+    # -------------------------
+    # Profiles (multi-profile)
+    # -------------------------
+    cursor.executescript("""
+    CREATE TABLE IF NOT EXISTS profiles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        avatar TEXT,
+        is_kid INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY(user_id) REFERENCES users(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS profile_watchlist (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL,
+        movie_id INTEGER NOT NULL,
+        added_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY(profile_id) REFERENCES profiles(id)
+    );
+    """)
 
     conn.commit()
     conn.close()
