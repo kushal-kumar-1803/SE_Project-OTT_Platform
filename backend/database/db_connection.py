@@ -23,7 +23,12 @@ def init_db():
         password TEXT,
         role TEXT DEFAULT 'user',
         reset_token TEXT,
-        reset_expiry TEXT
+        reset_expiry TEXT,
+        profile_type TEXT DEFAULT 'adult',
+        bio TEXT,
+        profile_picture_url TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS movies (
@@ -32,7 +37,8 @@ def init_db():
         genre TEXT,
         description TEXT,
         video_url TEXT,
-        poster_url TEXT
+        poster_url TEXT,
+        is_kids_friendly INTEGER DEFAULT 1
     );
 
      CREATE TABLE IF NOT EXISTS subscriptions (

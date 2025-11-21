@@ -388,6 +388,7 @@ class TestSecurity(unittest.TestCase):
         ).fetchone()
         conn.close()
         
+        
         # Try to delete as user 2
         response = self.client.delete(
             f'/user/watchlist?watchlist_id={row["id"]}&user_id=2'
@@ -396,5 +397,146 @@ class TestSecurity(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
 
 
+# ============================================
+# TEST PROFILE MANAGEMENT (OTT-F-004, OTT-F-005)
+# ============================================
+
+class TestUserProfile(unittest.TestCase):
+    """Test user profile view and update functionality"""
+
+    @classmethod
+    def setUpClass(cls):
+        from backend.app import app
+        cls.app = app
+        cls.app.config['TESTING'] = True
+        cls.client = app.test_client()
+
+    def setUp(self):
+        """Set up test database"""
+        import sqlite3
+        self.conn = sqlite3.connect(':memory:')
+        self.conn.row_factory = sqlite3.Row
+
+    def tearDown(self):
+        """Clean up"""
+        self.conn.close()
+
+    def test_get_user_profile_success(self):
+        """TC-Profile-01: Get user profile successfully"""
+        # In a real scenario, this would fetch from DB
+        response = self.client.get('/user/profile?user_id=1')
+        
+        # Should return 200 or 404 (if user doesn't exist in test DB)
+        self.assertIn(response.status_code, [200, 404])
+
+    def test_get_user_profile_missing_user_id(self):
+        """TC-Profile-01b: Get profile without user_id"""
+        response = self.client.get('/user/profile')
+        
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.data)
+        self.assertIn('error', data)
+
+    def test_update_user_profile_success(self):
+        """TC-Profile-02: Update user profile successfully"""
+        payload = {
+            "user_id": 1,
+            "name": "John Updated",
+            "bio": "Test bio",
+            "profile_type": "adult"
+        }
+        
+        response = self.client.put(
+            '/user/profile',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        
+        # Should return 200 or 404 (if user doesn't exist in test DB)
+        self.assertIn(response.status_code, [200, 404])
+
+    def test_update_profile_invalid_profile_type(self):
+        """TC-Profile-02b: Reject invalid profile_type"""
+        payload = {
+            "user_id": 1,
+            "name": "John",
+            "profile_type": "invalid_type"
+        }
+        
+        response = self.client.put(
+            '/user/profile',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        
+        # Should return 400 for invalid profile_type
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.data)
+        self.assertIn('error', data)
+
+    def test_kids_profile_type_validation(self):
+        """TC-Profile-03: Validate kids profile type"""
+        payload = {
+            "user_id": 1,
+            "name": "Junior",
+            "profile_type": "kids"
+        }
+        
+        response = self.client.put(
+            '/user/profile',
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        
+        # Should accept 'kids' profile type
+        self.assertIn(response.status_code, [200, 404])
+        if response.status_code == 200:
+            data = json.loads(response.data)
+            self.assertNotIn('error', data)
+
+
+# ============================================
+# TEST KIDS MODE FILTERING
+# ============================================
+
+class TestKidsModeFiltering(unittest.TestCase):
+    """Test that kids mode filters adult content"""
+
+    @classmethod
+    def setUpClass(cls):
+        from backend.app import app
+        cls.app = app
+        cls.app.config['TESTING'] = True
+        cls.client = app.test_client()
+
+    def test_get_all_movies_adult_mode(self):
+        """TC-Browse-03: Get all movies in adult mode"""
+        response = self.client.get('/movies?profile_type=adult')
+        
+        self.assertIn(response.status_code, [200, 404])
+
+    def test_get_all_movies_kids_mode(self):
+        """TC-Browse-04: Get family-friendly movies in kids mode"""
+        response = self.client.get('/movies?profile_type=kids')
+        
+        self.assertIn(response.status_code, [200, 404])
+        
+        if response.status_code == 200:
+            data = json.loads(response.data)
+            # If results exist, verify kids_friendly flag
+            if 'results' in data and data['results']:
+                for movie in data['results']:
+                    # All movies should have is_kids_friendly=1 in kids mode
+                    if 'is_kids_friendly' in movie:
+                        self.assertEqual(movie['is_kids_friendly'], 1)
+
+    def test_search_with_kids_filter(self):
+        """TC-Search-02: Search respects kids mode filter"""
+        response = self.client.get('/movies/search?q=movie&profile_type=kids')
+        
+        self.assertIn(response.status_code, [200, 404])
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
+

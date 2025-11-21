@@ -8,42 +8,58 @@ from backend.services.tmdb_service import (
     get_image_url
 )
 
+# Helper function to filter movies based on profile type
+def apply_kids_filter(movies, profile_type):
+    """Filter movies if profile_type is 'kids'"""
+    if profile_type == "kids":
+        return [m for m in movies if m.get("is_kids_friendly", 1)]
+    return movies
+
 # -----------------------------
 # LOCAL DB MOVIES
 # -----------------------------
 def get_all_movies():
+    profile_type = request.args.get("profile_type", "adult")  # Get user's profile type
+    
     conn = get_db_connection()
     movies = conn.execute("SELECT * FROM movies").fetchall()
     conn.close()
 
-    return jsonify({"results": [dict(row) for row in movies]})
+    movies_list = [dict(row) for row in movies]
+    filtered_movies = apply_kids_filter(movies_list, profile_type)
+
+    return jsonify({"results": filtered_movies})
 
 
 def search_local_movies():
     query = request.args.get("q", "").lower().strip()
+    profile_type = request.args.get("profile_type", "adult")
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     rows = cursor.execute("""
-        SELECT id, title, genre, description
+        SELECT id, title, genre, description, is_kids_friendly
         FROM movies
         WHERE LOWER(title) LIKE ? OR LOWER(genre) LIKE ?
     """, (f"%{query}%", f"%{query}%")).fetchall()
 
     conn.close()
-
     results = [
         {
             "id": row["id"],
             "title": row["title"],
             "genre": row["genre"],
+            "is_kids_friendly": row["is_kids_friendly"],
             "poster": "https://placehold.co/300x450?text=" + row["title"]
         }
         for row in rows
     ]
 
-    return jsonify({"results": results})
+    # Apply kids mode filter
+    filtered_results = apply_kids_filter(results, profile_type)
+
+    return jsonify({"results": filtered_results})
 
 
 # -----------------------------

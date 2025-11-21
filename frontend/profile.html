@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - OTT Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ff6b00;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            overflow: hidden;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            color: #ccc;
+        }
+
+        .profile-mode {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #ff6b00;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .profile-mode.kids {
+            background: #7b68ee;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ff6b00;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b00;
+            box-shadow: 0 0 5px rgba(255, 107, 0, 0.5);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-save {
+            background: #ff6b00;
+            color: #fff;
+        }
+
+        .btn-save:hover {
+            background: #e55a00;
+        }
+
+        .btn-cancel {
+            background: #555;
+            color: #fff;
+        }
+
+        .btn-cancel:hover {
+            background: #666;
+        }
+
+        .btn-edit {
+            background: #007bff;
+            color: #fff;
+            margin-left: auto;
+        }
+
+        .btn-edit:hover {
+            background: #0056b3;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #28a745;
+            color: #fff;
+            display: block;
+        }
+
+        .message.error {
+            background: #dc3545;
+            color: #fff;
+            display: block;
+        }
+
+        .edit-mode {
+            display: none;
+        }
+
+        .edit-mode.active {
+            display: block;
+        }
+
+        .view-mode {
+            display: block;
+        }
+
+        .view-mode.hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            color: #ff6b00;
+            font-size: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-edit {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div id="messageBox" class="message"></div>
+
+        <div id="loadingBox" class="loading" style="display: none;">Loading profile...</div>
+
+        <!-- View Mode -->
+        <div id="viewMode" class="view-mode">
+            <div class="profile-header">
+                <div class="profile-picture" id="profilePictureView">
+                    <span>👤</span>
+                </div>
+                <div class="profile-info">
+                    <h1 id="nameView">-</h1>
+                    <p><strong>Email:</strong> <span id="emailView">-</span></p>
+                    <p><strong>Member Since:</strong> <span id="createdAtView">-</span></p>
+                    <div class="profile-mode" id="profileModeView">Adult</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Profile Details</h2>
+                <p><strong>Bio:</strong></p>
+                <p id="bioView" style="color: #aaa; margin-left: 20px;">-</p>
+                <button class="btn btn-edit" id="editBtn">✏️ Edit Profile</button>
+            </div>
+        </div>
+
+        <!-- Edit Mode -->
+        <div id="editMode" class="edit-mode">
+            <form id="profileForm">
+                <div class="form-section">
+                    <h2>Edit Profile</h2>
+
+                    <div class="form-group">
+                        <label for="nameInput">Full Name</label>
+                        <input type="text" id="nameInput" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailInput">Email (Read-only)</label>
+                        <input type="email" id="emailInput" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profileTypeInput">Profile Type</label>
+                        <select id="profileTypeInput" required>
+                            <option value="adult">Adult</option>
+                            <option value="kids">Kids (Family-Friendly Content)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bioInput">Bio</label>
+                        <textarea id="bioInput" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-cancel" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-save">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get user_id from localStorage (set during login)
+        const userId = localStorage.getItem('user_id');
+        const token = localStorage.getItem('token');
+
+        if (!userId || !token) {
+            alert('Please log in first.');
+            window.location.href = '/login';
+        }
+
+        const API_BASE = 'http://127.0.0.1:5000';
+        const messageBox = document.getElementById('messageBox');
+        const loadingBox = document.getElementById('loadingBox');
+        const viewMode = document.getElementById('viewMode');
+        const editMode = document.getElementById('editMode');
+        const editBtn = document.getElementById('editBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const profileForm = document.getElementById('profileForm');
+
+        // Load profile on page load
+        function loadProfile() {
+            loadingBox.style.display = 'block';
+            fetch(`${API_BASE}/user/profile?user_id=${userId}`)
+                .then(r => r.json())
+                .then(data => {
+                    loadingBox.style.display = 'none';
+                    if (data.error) {
+                        showMessage(data.error, 'error');
+                        return;
+                    }
+
+                    // Display profile in view mode
+                    document.getElementById('nameView').innerText = data.name || 'N/A';
+                    document.getElementById('emailView').innerText = data.email || 'N/A';
+                    document.getElementById('bioView').innerText = data.bio || 'No bio added yet.';
+                    document.getElementById('createdAtView').innerText = new Date(data.created_at).toLocaleDateString() || 'N/A';
+
+                    const modeLabel = data.profile_type === 'kids' ? '👶 Kids Mode' : '👤 Adult Mode';
+                    document.getElementById('profileModeView').innerText = modeLabel;
+                    document.getElementById('profileModeView').classList.toggle('kids', data.profile_type === 'kids');
+
+                    // Update profile picture
+                    if (data.profile_picture_url) {
+                        document.getElementById('profilePictureView').innerHTML = `<img src="${data.profile_picture_url}" alt="Profile">`;
+                    }
+
+                    // Pre-fill edit form
+                    document.getElementById('nameInput').value = data.name || '';
+                    document.getElementById('emailInput').value = data.email || '';
+                    document.getElementById('bioInput').value = data.bio || '';
+                    document.getElementById('profileTypeInput').value = data.profile_type || 'adult';
+                })
+                .catch(err => {
+                    loadingBox.style.display = 'none';
+                    console.error('Error loading profile:', err);
+                    showMessage('Failed to load profile. Please try again.', 'error');
+                });
+        }
+
+        // Switch to edit mode
+        editBtn.addEventListener('click', () => {
+            viewMode.classList.add('hidden');
+            editMode.classList.add('active');
+        });
+
+        // Switch back to view mode
+        cancelBtn.addEventListener('click', () => {
+            viewMode.classList.remove('hidden');
+            editMode.classList.remove('active');
+        });
+
+        // Save profile changes
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const payload = {
+                user_id: userId,
+                name: document.getElementById('nameInput').value,
+                bio: document.getElementById('bioInput').value,
+                profile_type: document.getElementById('profileTypeInput').value
+            };
+
+            fetch(`${API_BASE}/user/profile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    showMessage(data.error, 'error');
+                    return;
+                }
+                showMessage('Profile updated successfully!', 'success');
+                viewMode.classList.remove('hidden');
+                editMode.classList.remove('active');
+                setTimeout(loadProfile, 1500);
+            })
+            .catch(err => {
+                console.error('Error updating profile:', err);
+                showMessage('Failed to update profile. Please try again.', 'error');
+            });
+        });
+
+        // Show message
+        function showMessage(text, type) {
+            messageBox.className = `message ${type}`;
+            messageBox.innerText = text;
+            setTimeout(() => {
+                messageBox.className = 'message';
+            }, 4000);
+        }
+
+        // Load profile on page load
+        loadProfile();
+    </script>
+</body>
+</html>

@@ -78,6 +78,10 @@ def register_page():
 def forgot_page():
     return send_from_directory("../frontend", "forgot.html")
 
+@app.route("/profile")
+def profile_page():
+    return send_from_directory("../frontend", "profile.html")
+
 @app.route("/movie/<int:movie_id>")
 def movie_detail(movie_id):
     return send_from_directory("../frontend", "movie_detail.html")

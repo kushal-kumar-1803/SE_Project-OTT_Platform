@@ -366,3 +366,84 @@ def get_user_rating():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# ========================================
+# USER PROFILE (NEW - OTT-F-004, OTT-F-005)
+# ========================================
+
+def get_user_profile():
+    """
+    Get user profile details
+    GET /user/profile?user_id=<id>
+    """
+    try:
+        user_id = request.args.get("user_id")
+        if not user_id:
+            return jsonify({"error": "user_id required"}), 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        user = cursor.execute("""
+            SELECT id, name, email, role, profile_type, bio, profile_picture_url, created_at, updated_at
+            FROM users
+            WHERE id=?
+        """, (user_id,)).fetchone()
+
+        conn.close()
+
+        if user:
+            return jsonify(dict(user)), 200
+        else:
+            return jsonify({"error": "User not found"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+def update_user_profile():
+    """
+    Update user profile details
+    PUT /user/profile
+    Body: {user_id, name, bio, profile_type, profile_picture_url}
+    """
+    try:
+        data = request.get_json()
+        user_id = data.get("user_id")
+        name = data.get("name")
+        bio = data.get("bio", "")
+        profile_type = data.get("profile_type", "adult")  # "adult" or "kids"
+        profile_picture_url = data.get("profile_picture_url", "")
+
+        if not user_id:
+            return jsonify({"error": "user_id required"}), 400
+
+        # Validate profile_type
+        if profile_type not in ["adult", "kids"]:
+            return jsonify({"error": "profile_type must be 'adult' or 'kids'"}), 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Check if user exists
+        user = cursor.execute("SELECT id FROM users WHERE id=?", (user_id,)).fetchone()
+        if not user:
+            conn.close()
+            return jsonify({"error": "User not found"}), 404
+
+        # Update profile
+        cursor.execute("""
+            UPDATE users
+            SET name=?, bio=?, profile_type=?, profile_picture_url=?, updated_at=datetime('now')
+            WHERE id=?
+        """, (name, bio, profile_type, profile_picture_url, user_id))
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({"message": "Profile updated successfully", "user_id": user_id}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
