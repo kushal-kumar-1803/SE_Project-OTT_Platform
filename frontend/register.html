@@ -15,7 +15,8 @@
   <form id="registerForm">
     <input type="text" id="fullname" placeholder="Full Name" required>
     <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
+    <input type="password" id="password" placeholder="Password (min 6 chars)" minlength="6" required>
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" minlength="6" required>
     <button type="submit" id="signupBtn">Sign Up</button>
   </form>
 
@@ -26,13 +27,28 @@
 document.getElementById("registerForm").addEventListener("submit", (e) => {
     e.preventDefault();
 
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters!");
+        return;
+    }
+
     fetch("http://127.0.0.1:5000/auth/register", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-            name: fullname.value,
-            email: email.value,
-            password: password.value
+            name: document.getElementById("fullname").value,
+            email: document.getElementById("email").value,
+            password: password
         })
     })
     .then(r => r.json())
@@ -48,8 +64,9 @@ document.getElementById("registerForm").addEventListener("submit", (e) => {
         console.error("JS Error:", err);
         alert("Something went wrong!");
     });
-  </script>
+});
+</script>
 
 </body>
 </html>
-
+</html>
