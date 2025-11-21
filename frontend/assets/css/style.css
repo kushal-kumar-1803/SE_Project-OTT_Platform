@@ -83,13 +83,25 @@ main{padding:28px 48px}
 
 .movie-card {
   width: 180px;
+  height: 270px;
   border-radius: 6px;
   transition: transform 0.2s ease;
   cursor: pointer;
+  overflow: hidden;
+  background: var(--card);
+  flex: 0 0 auto;
+}
+
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 .movie-card:hover {
-  transform: scale(1.12);
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
 }
 
 .hero-banner {
@@ -144,29 +156,20 @@ main{padding:28px 48px}
 .row-title {
     font-size: 28px;
     color: white;
-    margin: 20px 0 10px 20px;
+    margin: 20px 0 10px 50px;
 }
 
 .row-cards {
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding: 0 20px;
-}
-
-.movie-card img {
-    width: 180px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.movie-card img:hover {
-    transform: scale(1.05);
+    padding: 0 50px 20px 50px;
+    scroll-behavior: smooth;
 }
 
 .movie-section {
     margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .detail-hero {
@@ -253,3 +256,45 @@ main{padding:28px 48px}
   margin-right: 12px;
   margin-top: 15px;
 }
+
+/* ---- PROFILE AVATAR GRID ---- */
+.avatar-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.avatar-grid img {
+    width: 120px;       /* smaller size */
+    height: 120px;
+    border-radius: 12px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease, outline 0.2s ease;
+    border: 3px solid transparent;
+}
+
+.avatar-grid img:hover {
+    transform: scale(1.05);
+}
+
+.avatar-grid img.selected {
+    border: 3px solid #e50914;
+    transform: scale(1.08);
+}
+
+/* Profile create layout */
+.profile-create-layout {
+  display: flex;
+  gap: 36px;
+  align-items: flex-start;
+}
+.profile-form { flex: 1; max-width: 640px }
+.profile-preview { width: 260px; }
+.preview-card { background: linear-gradient(180deg,#1a1a1a,#121212); padding:16px; border-radius:12px; display:flex; gap:12px; align-items:center; box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+.preview-card img { width:84px; height:84px; border-radius:12px; object-fit:cover; border:3px solid rgba(255,255,255,0.04) }
+.preview-info { color:var(--white); }
+.preview-info #previewName { font-weight:700; font-size:18px }
+.kid-badge { margin-top:6px; display:inline-block; padding:4px 8px; background:#ffb3b3; color:#400; border-radius:12px; font-size:12px }
+.muted { color:var(--muted); font-size:13px }
