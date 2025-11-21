@@ -7,7 +7,6 @@ Aligns with OTT-F-040, OTT-F-050 from test plan
 from flask import request, jsonify
 from datetime import datetime
 from backend.database.db_connection import get_db_connection
-from backend.services.jwt_services import decode_token
 
 # ========================================
 # WATCH HISTORY (OTT-F-040)
