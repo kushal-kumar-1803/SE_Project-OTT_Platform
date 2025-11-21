@@ -283,3 +283,18 @@ main{padding:28px 48px}
     border: 3px solid #e50914;
     transform: scale(1.08);
 }
+
+/* Profile create layout */
+.profile-create-layout {
+  display: flex;
+  gap: 36px;
+  align-items: flex-start;
+}
+.profile-form { flex: 1; max-width: 640px }
+.profile-preview { width: 260px; }
+.preview-card { background: linear-gradient(180deg,#1a1a1a,#121212); padding:16px; border-radius:12px; display:flex; gap:12px; align-items:center; box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+.preview-card img { width:84px; height:84px; border-radius:12px; object-fit:cover; border:3px solid rgba(255,255,255,0.04) }
+.preview-info { color:var(--white); }
+.preview-info #previewName { font-weight:700; font-size:18px }
+.kid-badge { margin-top:6px; display:inline-block; padding:4px 8px; background:#ffb3b3; color:#400; border-radius:12px; font-size:12px }
+.muted { color:var(--muted); font-size:13px }

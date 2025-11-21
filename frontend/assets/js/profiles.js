@@ -10,6 +10,9 @@ function getUserId() {
 function initCreateProfile() {
     const grid = document.getElementById("avatarGrid");
     let selectedAvatar = "";
+    const previewAvatar = document.getElementById("previewAvatar");
+    const previewName = document.getElementById("previewName");
+    const previewBadge = document.getElementById("previewBadge");
 
     // Defensive: ensure grid exists
     if (!grid) {
@@ -32,9 +35,29 @@ function initCreateProfile() {
 
             // prefer data-src attribute, fallback to src
             selectedAvatar = img.getAttribute("data-src") || img.src || "";
-                    console.log("Selected Avatar:", selectedAvatar);
+            console.log("Selected Avatar:", selectedAvatar);
+
+            // update preview image
+            if (previewAvatar) previewAvatar.src = selectedAvatar;
         });
     });
+
+    // live update preview name
+    const nameInput = document.getElementById("profileName");
+    if (nameInput && previewName) {
+        nameInput.addEventListener("input", () => {
+            previewName.textContent = nameInput.value.trim() || "Your Name";
+        });
+    }
+
+    // update preview badge for kids mode
+    const kidCheckbox = document.getElementById("isKid");
+    if (kidCheckbox && previewBadge) {
+        kidCheckbox.addEventListener("change", () => {
+            if (kidCheckbox.checked) previewBadge.hidden = false;
+            else previewBadge.hidden = true;
+        });
+    }
 
     // Create profile button
     document.getElementById("createBtn").onclick = async () => {

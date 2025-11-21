@@ -33,24 +33,40 @@
     <main style="padding: 40px;">
         <h1>Create Profile</h1>
 
-        <label>Profile Name</label>
-        <input id="profileName" placeholder="Enter name">
+        <div class="profile-create-layout">
+            <section class="profile-form">
+                <label>Profile Name</label>
+                <input id="profileName" placeholder="Enter name">
 
-        <div style="margin-top: 10px;">
-            <label><input type="checkbox" id="isKid"> Kids Mode</label>
+                <div style="margin-top: 10px;">
+                    <label><input type="checkbox" id="isKid"> Kids Mode</label>
+                </div>
+
+                <h2 style="margin-top: 20px;">Choose Avatar</h2>
+
+                <div id="avatarGrid" class="avatar-grid">
+                    <img src="/assets/images/avatar1.png" class="avatar-img" data-src="/assets/images/avatar1.png" alt="avatar 1">
+                    <img src="/assets/images/avatar2.png" class="avatar-img" data-src="/assets/images/avatar2.png" alt="avatar 2">
+                    <img src="/assets/images/avatar3.png" class="avatar-img" data-src="/assets/images/avatar3.png" alt="avatar 3">
+                    <img src="/assets/images/avatar4.png" class="avatar-img" data-src="/assets/images/avatar4.png" alt="avatar 4">
+                    <img src="/assets/images/avatar5.png" class="avatar-img" data-src="/assets/images/avatar5.png" alt="avatar 5">
+                </div>
+
+                <button id="createBtn" class="btn-white" style="margin-top: 20px;">Create Profile</button>
+            </section>
+
+            <aside class="profile-preview">
+                <h3>Preview</h3>
+                <div class="preview-card">
+                    <img id="previewAvatar" src="/assets/images/avatar1.png" alt="preview avatar">
+                    <div class="preview-info">
+                        <div id="previewName">Your Name</div>
+                        <div id="previewBadge" class="kid-badge" hidden>Kids</div>
+                    </div>
+                </div>
+                <p class="muted">Tip: Click an avatar to select. The preview updates live.</p>
+            </aside>
         </div>
-
-        <h2 style="margin-top: 20px;">Choose Avatar</h2>
-
-        <div id="avatarGrid" class="avatar-grid">
-            <img src="/assets/images/avatar1.png" class="avatar-img" data-src="/assets/images/avatar1.png">
-            <img src="/assets/images/avatar2.png" class="avatar-img" data-src="/assets/images/avatar2.png">
-            <img src="/assets/images/avatar3.png" class="avatar-img" data-src="/assets/images/avatar3.png">
-            <img src="/assets/images/avatar4.png" class="avatar-img" data-src="/assets/images/avatar4.png">
-            <img src="/assets/images/avatar5.png" class="avatar-img" data-src="/assets/images/avatar5.png">
-        </div>
-
-        <button id="createBtn" class="btn-white" style="margin-top: 20px;">Create Profile</button>
     </main>
 
     <script src="/assets/js/profiles.js"></script>
