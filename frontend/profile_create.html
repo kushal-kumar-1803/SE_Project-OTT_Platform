@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Create Profile</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .avatar-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+        .avatar-img.selected {
+            border: 3px solid #fff;
+        }
+        .avatar-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="logo">OTT</div>
+    </header>
+
+    <main style="padding: 40px;">
+        <h1>Create Profile</h1>
+
+        <label>Profile Name</label>
+        <input id="profileName" placeholder="Enter name">
+
+        <div style="margin-top: 10px;">
+            <label><input type="checkbox" id="isKid"> Kids Mode</label>
+        </div>
+
+        <h2 style="margin-top: 20px;">Choose Avatar</h2>
+
+        <div id="avatarGrid" class="avatar-grid">
+            <img src="/assets/images/avatar1.png" class="avatar-img" data-src="/assets/images/avatar1.png">
+            <img src="/assets/images/avatar2.png" class="avatar-img" data-src="/assets/images/avatar2.png">
+            <img src="/assets/images/avatar3.png" class="avatar-img" data-src="/assets/images/avatar3.png">
+            <img src="/assets/images/avatar4.png" class="avatar-img" data-src="/assets/images/avatar4.png">
+            <img src="/assets/images/avatar5.png" class="avatar-img" data-src="/assets/images/avatar5.png">
+        </div>
+
+        <button id="createBtn" class="btn-white" style="margin-top: 20px;">Create Profile</button>
+    </main>
+
+    <script src="/assets/js/profiles.js"></script>
+</body>
+</html>
