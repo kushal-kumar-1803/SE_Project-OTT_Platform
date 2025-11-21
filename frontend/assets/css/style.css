@@ -298,3 +298,33 @@ main{padding:28px 48px}
 .preview-info #previewName { font-weight:700; font-size:18px }
 .kid-badge { margin-top:6px; display:inline-block; padding:4px 8px; background:#ffb3b3; color:#400; border-radius:12px; font-size:12px }
 .muted { color:var(--muted); font-size:13px }
+
+.profiles-link {
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+.profiles-link:hover {
+    color: #e50914;
+}
+.left-group {
+    display: flex;
+    align-items: center;
+    gap: 30px;     /* space between logo & Profiles */
+}
+
+.profiles-link {
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+}
+
+.profiles-link:hover {
+    color: #e50914;
+}

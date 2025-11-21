@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <a href="/profiles">Profiles</a>
-
-
-
-
-
-    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>OTT — Home</title>
@@ -16,7 +9,11 @@
 <body>
 
 <header class="site-header">
-    <div class="logo">OTT</div>
+
+    <div class="left-group">
+        <div class="logo">Film Aura</div>
+        <a class="profiles-link" href="/profiles">Profiles</a>
+    </div>
 
     <div class="header-actions">
         <input id="searchInput" placeholder="Search movies..." />
@@ -25,23 +22,24 @@
         <a id="loginLink" href="/login">Login</a>
         <a id="adminLink" href="/admin">Admin</a>
 
-        <!-- ⭐ SUBSCRIBE BUTTON (ONLY for new users) -->
         <button id="subscribeBtn"
-                style="
-                    display:none;
-                    background:#ff0000;
-                    color:white;
-                    padding:10px 20px;
-                    border:none;
-                    border-radius:5px;
-                    cursor:pointer;
-                    margin-right:10px;">
+            style="
+            display:none;
+            background:#ff0000;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            margin-right:10px;">
             Subscribe
         </button>
 
         <button id="logoutBtn" style="display: none;">Logout</button>
     </div>
+
 </header>
+
 
 <main>
 
@@ -85,7 +83,6 @@ if (token) {
     document.getElementById("logoutBtn").style.display = "inline-block";
     document.getElementById("homeLink").style.display = "inline-block";
 } else {
-    // Not logged in → hide subscribe button
     document.getElementById("subscribeBtn").style.display = "none";
 }
 
@@ -100,10 +97,8 @@ async function checkSubscriptionStatus() {
         const data = await res.json();
 
         if (data.subscribed === true) {
-            console.log("User is subscribed:", data.plan);
             document.getElementById("subscribeBtn").style.display = "none";
         } else {
-            console.log("User NOT subscribed");
             document.getElementById("subscribeBtn").style.display = "inline-block";
         }
 
@@ -118,7 +113,7 @@ checkSubscriptionStatus();
    3. SUBSCRIBE BUTTON CLICK
 --------------------------------------------------- */
 document.getElementById("subscribeBtn").addEventListener("click", () => {
-    window.location.href = "/page/subscribe.html"; // fake payment page
+    window.location.href = "/subscribe";
 });
 
 /* -------------------------------------------------

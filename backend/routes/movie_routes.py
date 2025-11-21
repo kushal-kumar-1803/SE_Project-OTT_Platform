@@ -1,6 +1,6 @@
 # backend/routes/movie_routes.py
-
-from flask import Blueprint, request, jsonify
+import os
+from flask import Blueprint, request, jsonify, send_file
 from backend.database.db_connection import get_db_connection
 from backend.services.tmdb_service import (
     search_movies as tmdb_search,
@@ -102,10 +102,44 @@ def tmdb_detail(movie_id):
 
 @movie_bp.route("/stream/<int:movie_id>")
 def stream_movie(movie_id):
-    # Demo movie file
-    return """
-    <h1 style='color:white'>Streaming Full Movie (Demo)</h1>
-    <video width='900' controls autoplay>
-      <source src='/assets/movies/demo.mp4' type='video/mp4'>
-    </video>
-    """
+
+    # Map movie ID → local video file
+    if movie_id == 109445:
+        video_path = "../../frontend/assets/videos/frozen.mp4"
+    else:
+        return {"error": "Movie not found"}, 404
+
+    # Build absolute path
+    abs_path = os.path.abspath(os.path.join(os.path.dirname(__file__), video_path))
+
+    if not os.path.exists(abs_path):
+        return {
+            "error": "File not found",
+            "looked_for": abs_path
+        }, 404
+
+    return send_file(abs_path, mimetype="video/mp4")
+
+@movie_bp.route("/all", methods=["GET"])
+def get_all_local_movies():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    rows = cursor.execute("""
+        SELECT id, title, genre, description, poster_url, video_url
+        FROM movies
+    """).fetchall()
+    conn.close()
+
+    results = []
+    for row in rows:
+        results.append({
+            "id": row["id"],
+            "title": row["title"],
+            "genre": row["genre"],
+            "description": row["description"],
+            "poster_url": row["poster_url"] or "/assets/images/default_poster.jpg",
+            "video_url": row["video_url"]
+        })
+
+    return jsonify({"results": results})

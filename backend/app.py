@@ -118,3 +118,10 @@ def payment_page():
 
 if __name__ == "__main__":
     app.run(debug=True)
+from flask import send_from_directory
+
+@app.route('/videos/<path:filename>')
+def serve_video(filename):
+    return send_from_directory('../frontend/videos', filename)
+if __name__ == "__main__":
+    app.run()

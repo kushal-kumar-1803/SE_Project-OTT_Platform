@@ -1,6 +1,6 @@
 # backend/controllers/auth_controller.py
 
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from flask_mail import Message
@@ -102,11 +102,21 @@ def forgot_password():
 
     msg = Message(
         subject="OTT Password Reset Code",
-        sender="mdsadatullah97@gmail.com",
+        sender=current_app.config.get("MAIL_USERNAME", "no-reply@example.com"),
         recipients=[email],
         body=f"Your OTP is: {otp}\nValid for 10 minutes."
     )
-    mail.send(msg)
+
+    try:
+        mail.send(msg)
+    except Exception as e:
+        # Log the exception with traceback to help debugging
+        current_app.logger.exception("Failed to send OTP email")
+        # For development/debugging, include a helpful message in the response
+        # but do not return the OTP in production.
+        if current_app.config.get("DEBUG", False):
+            return jsonify({"error": "Failed to send OTP email (see server logs)", "otp_debug": otp}), 500
+        return jsonify({"error": "Failed to send OTP email (see server logs)"}), 500
 
     return jsonify({"message": "OTP sent to email"}), 200
 
