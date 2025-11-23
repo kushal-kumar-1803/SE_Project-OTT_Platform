@@ -1,8 +1,8 @@
-<h1 align="center">🎬 <strong>FilmAura — OTT Streaming Platform</strong></h1>
+<h1 align="center">🎬 <strong>OTT Streaming Platform</strong></h1>
 <p align="center"><em>A modern, Netflix-inspired OTT system built with Flask, SQLite, and TMDB API.</em></p> <br> <p align="center"> <img src="https://img.shields.io/badge/Framework-Flask-black?style=for-the-badge&logo=flask"> <img src="https://img.shields.io/badge/Database-SQLite-07405E?style=for-the-badge&logo=sqlite"> <img src="https://img.shields.io/badge/CI/CD-GitHub%20Actions-2F80ED?style=for-the-badge&logo=githubactions"> <img src="https://img.shields.io/badge/API-TMDB-01B4E4?style=for-the-badge&logo=themoviedatabase"> </p> <br>
 <h2>✨ Overview</h2>
 
-FilmAura is a full-stack OTT platform where users can:
+A full-stack OTT platform where users can:
 ✔ Watch movies
 ✔ Explore trending films
 ✔ Add movies to a personal watchlist
@@ -135,15 +135,6 @@ Manual Run
 File:
 
 .github/workflows/ci.yml
-
-<br>
-<h2>📸 Screenshots</h2>
-
-(Add your images here)
-
-![Home Page](screenshots/home.png)
-![Movie Detail](screenshots/movie.png)
-![Watchlist](screenshots/watchlist.png)
 
 <br>
 <h2>👨‍💻 Team</h2>
