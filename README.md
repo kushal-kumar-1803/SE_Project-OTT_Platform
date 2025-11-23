@@ -138,11 +138,11 @@ File:
 
 <br>
 <h2>👨‍💻 Team</h2>
-Member	Role
-Kushal Kumar	Backend + Integration
-Member 2	Frontend
-Member 3	TMDB Integration
-Member 4	Testing & Docs
+Member
+Kushal Kumar - Backend + Integration
+Laasya R - Frontend and admin panel
+Mohammed Sadatullah - User registration and forgot password
+Mohin Nayumsab - Testing & Docs
 <br>
 <h2>🌟 Future Enhancements</h2>
 
