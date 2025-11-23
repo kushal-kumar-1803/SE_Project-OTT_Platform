@@ -1,62 +1,57 @@
-<h1 align="center">🎬 FilmAura — OTT Streaming Platform</h1>
-<p align="center"><i>A cinematic OTT platform inspired by Netflix — built with Flask, SQLite, and TMDB API.</i></p> <br> <p align="center"> <img src="https://img.shields.io/badge/Backend-Flask-000000?style=for-the-badge&logo=flask"> <img src="https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite"> <img src="https://img.shields.io/badge/CI/CD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions"> <img src="https://img.shields.io/badge/API-TMDB-01B4E4?style=for-the-badge&logo=themoviedatabase"> </p>
-⭐ Overview
+<h1 align="center">🎬 <strong>FilmAura — OTT Streaming Platform</strong></h1>
+<p align="center"><em>A modern, Netflix-inspired OTT system built with Flask, SQLite, and TMDB API.</em></p> <br> <p align="center"> <img src="https://img.shields.io/badge/Framework-Flask-black?style=for-the-badge&logo=flask"> <img src="https://img.shields.io/badge/Database-SQLite-07405E?style=for-the-badge&logo=sqlite"> <img src="https://img.shields.io/badge/CI/CD-GitHub%20Actions-2F80ED?style=for-the-badge&logo=githubactions"> <img src="https://img.shields.io/badge/API-TMDB-01B4E4?style=for-the-badge&logo=themoviedatabase"> </p> <br>
+<h2>✨ Overview</h2>
 
-FilmAura is a modern OTT streaming platform that lets users watch movies, manage watchlists, explore trending films through TMDB API, and access premium content using a subscription system.
-Admins can upload movies, approve payments, and manage the content library.
+FilmAura is a full-stack OTT platform where users can:
+✔ Watch movies
+✔ Explore trending films
+✔ Add movies to a personal watchlist
+✔ Access premium content using a subscription system
 
-The project uses:
+Admins get tools to upload movies, manage posters, control subscriptions, and monitor the platform.
 
-✨ Flask (Python)
+<br>
+<h2>🚀 Features</h2>
+<h3>🎯 User Features</h3>
 
-✨ SQLite database
+🔐 Secure Login & Register
 
-✨ TMDB API
+🎞 Watch uploaded movies (MP4 streaming)
 
-✨ HTML, CSS, JS (Frontend)
+⭐ Add/remove movies from My Watchlist
 
-✨ GitHub Actions for CI Pipeline
+🔍 Search movies instantly
 
-🚀 Features
-🎯 User Features
+🎬 TMDB trending & categories
 
-🔐 Login / Registration
+💳 Subscription-based movie access
 
-🎞 Movie streaming (local uploaded MP4)
+<br>
+<h3>🛠 Admin Features</h3>
 
-📌 Add to watchlist
-
-❤️ Dedicated My Watchlist page
-
-🔎 Search movies
-
-🎬 TMDB Trending & Genre-based movies
-
-💳 Subscription system for premium movies
-
-🛠 Admin Features
-
-🎥 Upload movies (MP4)
+🎥 Upload MP4 movies
 
 🖼 Upload posters
 
-🗃 Edit / Delete movies
+📁 Edit or delete movies
 
-🧾 Approve subscription payments
+📜 Approve subscription payments
 
-🧩 Movie list auto-updates on user homepage
+🔄 Automatic refresh on user side
 
-🤖 Developer Features
+<br>
+<h3>🤖 Developer Features</h3>
 
-🧪 PyTest suite for automated testing
+🧪 PyTest integration
 
-⚙️ CI/CD pipeline using GitHub Actions
+⚙️ GitHub Actions CI
 
-📦 Clean project structure
+🧹 Clean backend structure
 
-🔐 JWT Authentication
+🔐 JWT authentication
 
-🗂 Project Structure
+<br>
+<h2>📁 Project Structure</h2>
 SE_Project_OTT_Platform/
 │── backend/
 │   ├── app.py
@@ -67,96 +62,110 @@ SE_Project_OTT_Platform/
 │
 │── frontend/
 │   ├── index.html
-│   ├── assets/
-│   │   ├── css/
-│   │   ├── js/
-│   │   └── videos/   ← ignored in git
+│   ├── assets/css/
+│   ├── assets/js/
+│   └── assets/videos/      ← (ignored in git)
 │
 │── requirements.txt
 │── README.md
 │── .gitignore
 │── .github/workflows/ci.yml
 
-⚙️ Installation Guide
-1️⃣ Clone Repository
-git clone https://github.com/<your-username>/SE_Project-OTT_Platform.git
+<br>
+<h2>⚙️ Installation Guide</h2>
+<h3>1️⃣ Clone the Repository</h3>
+git clone https://github.com/<username>/SE_Project-OTT_Platform.git
 cd SE_Project-OTT_Platform
 
-2️⃣ Create Virtual Environment
+<br>
+<h3>2️⃣ Create Virtual Environment</h3>
 python -m venv venv
-venv/Scripts/activate   # Windows
+venv/Scripts/activate  # Windows
 # or
-source venv/bin/activate  # Mac/Linux
+source venv/bin/activate  # macOS/Linux
 
-3️⃣ Install Dependencies
+<br>
+<h3>3️⃣ Install Dependencies</h3>
 pip install -r requirements.txt
 
-4️⃣ Initialize Database
+<br>
+<h3>4️⃣ Initialize the Database</h3>
 python -c "from backend.database.db_connection import init_db; init_db()"
 
-5️⃣ Run Application
+<br>
+<h3>5️⃣ Run the Server</h3>
 python -m backend.app
 
 
-➡ Visit http://127.0.0.1:5000
+👉 App will run at: http://127.0.0.1:5000
 
-🧪 Running Tests
+<br>
+<h2>🧪 Running Tests</h2>
 pytest -q
 
 
-Includes test cases for:
+Includes automated tests for:
+✔ Authentication
+✔ Movies API
+✔ TMDB integration
+✔ Watchlist
+✔ Subscription system
 
-Auth (login/register)
+<br>
+<h2>⚡ CI/CD Pipeline (GitHub Actions)</h2>
 
-Movie APIs
+Your pipeline checks:
 
-TMDB integration
+🧪 PyTest
 
-Watchlist system
+📦 Dependency installation
 
-⚡ CI/CD Pipeline (GitHub Actions)
+✔ Code correctness
 
-The file .github/workflows/ci.yml performs:
-
-✔ Install dependencies
-✔ Prepare test environment
-✔ Run all PyTest tests
-✔ Auto-check code quality
+🔧 Clean execution
 
 Triggers on:
 
-Every push
+Push
 
-Every pull request
+Pull Request
 
-Manual run from Actions tab
+Manual Run
 
-🎥 Screenshots (Add your own)
+File:
 
-You can add screenshots like:
+.github/workflows/ci.yml
+
+<br>
+<h2>📸 Screenshots</h2>
+
+(Add your images here)
 
 ![Home Page](screenshots/home.png)
 ![Movie Detail](screenshots/movie.png)
-![Admin Panel](screenshots/admin.png)
+![Watchlist](screenshots/watchlist.png)
 
-👨‍💻 Team
+<br>
+<h2>👨‍💻 Team</h2>
 Member	Role
 Kushal Kumar	Backend + Integration
 Member 2	Frontend
 Member 3	TMDB Integration
-Member 4	Documentation & Testing
-🌟 Future Enhancements
+Member 4	Testing & Docs
+<br>
+<h2>🌟 Future Enhancements</h2>
 
-🎭 Multi-user profiles
+🎭 Profile-based recommendations
 
-📊 Analytics dashboard
+🧪 Automated load testing
 
-🧠 AI movie recommendation
+📊 Admin analytics dashboard
 
-🌐 Multi-language subtitles
+🎞 Subtitle support
 
-📶 Resume watching
+📱 Mobile app
 
-📝 License
+<br>
+<h2>📝 License</h2>
 
-MIT License © 2025
+MIT License © 2025 — FilmAura OTT
