@@ -1,0 +1,250 @@
+{
+  "info": {
+    "name": "OTT Streaming Platform API",
+    "_postman_id": "c12345ab-12de-45cd-afaa-19df1234abcd",
+    "description": "Postman Collection for OTT Platform - Auth, Movies, Admin, Playback",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@example.com\",\n  \"password\": \"Test@123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Test@123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "Get All Movies",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/movies",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "movies"]
+            }
+          }
+        },
+
+        {
+          "name": "Search Movies",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/movies/search?title=Avengers",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "movies", "search"],
+              "query": [
+                { "key": "title", "value": "Avengers" }
+              ]
+            }
+          }
+        },
+
+        {
+          "name": "Filter by Genre",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/movies/genre?action",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "movies", "genre", "action"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Playback",
+      "item": [
+        {
+          "name": "Get Playback URL",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/play/123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "play", "123"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Admin123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "login"]
+            }
+          }
+        },
+
+        {
+          "name": "Add Movie",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"title\": \"New Movie\",\n \"genre\": \"Action\",\n \"url\": \"http://video-link.mp4\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/movies",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "movies"]
+            }
+          }
+        },
+
+        {
+          "name": "Update Movie",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n \"title\": \"Updated Movie\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/movies/123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "movies", "123"]
+            }
+          }
+        },
+
+        {
+          "name": "Delete Movie",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/admin/movies/123",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "admin", "movies", "123"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Security Tests",
+      "item": [
+        {
+          "name": "Expired Token Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer EXPIRED_TOKEN_HERE" }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/movies",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "movies"]
+            }
+          }
+        },
+        {
+          "name": "SQL Injection Test",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/movies/search?title=' OR '1'='1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "movies", "search"],
+              "query": [
+                { "key": "title", "value": "' OR '1'='1" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

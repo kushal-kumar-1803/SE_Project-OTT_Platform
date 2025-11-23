@@ -1,0 +1,68 @@
+# ==============================
+# PYTHON
+# ==============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# Python logs
+*.log
+
+# Databases
+*.sqlite3
+*.db
+
+# ==============================
+# TESTING
+# ==============================
+pytest_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ==============================
+# FRONTEND
+# ==============================
+node_modules/
+dist/
+build/
+
+# Ignore uploaded videos (movies)
+frontend/assets/videos/*
+!frontend/assets/videos/.gitkeep
+
+# Ignore uploaded images (optional)
+frontend/assets/images/*
+!frontend/assets/images/.gitkeep
+
+# Ignore any video formats anywhere
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.flv
+*.wmv
+*.webm
+
+# ==============================
+# GIT / MERGE
+# ==============================
+*.orig
+*.tmp
+
+# ==============================
+# OS / SYSTEM FILES
+# ==============================
+.DS_Store
+.AppleDouble
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+venv/
