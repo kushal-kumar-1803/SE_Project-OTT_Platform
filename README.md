@@ -1,91 +1,62 @@
-🎬 FilmAura — Smart OTT Streaming Platform
+<h1 align="center">🎬 FilmAura — OTT Streaming Platform</h1>
+<p align="center"><i>A cinematic OTT platform inspired by Netflix — built with Flask, SQLite, and TMDB API.</i></p> <br> <p align="center"> <img src="https://img.shields.io/badge/Backend-Flask-000000?style=for-the-badge&logo=flask"> <img src="https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite"> <img src="https://img.shields.io/badge/CI/CD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions"> <img src="https://img.shields.io/badge/API-TMDB-01B4E4?style=for-the-badge&logo=themoviedatabase"> </p>
+⭐ Overview
 
-A modern Netflix-style OTT platform built with Flask, SQLite, and TMDB API.
+FilmAura is a modern OTT streaming platform that lets users watch movies, manage watchlists, explore trending films through TMDB API, and access premium content using a subscription system.
+Admins can upload movies, approve payments, and manage the content library.
 
-<p align="center"> <img src="https://img.shields.io/badge/Backend-Flask-000000?style=for-the-badge&logo=flask"> <img src="https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite"> <img src="https://img.shields.io/badge/Frontend-HTML/CSS/JS-blue?style=for-the-badge"> <img src="https://img.shields.io/badge/CI/CD-GitHub Actions-2088FF?style=for-the-badge&logo=githubactions"> </p>
-🌟 Overview
+The project uses:
 
-FilmAura is a feature-rich OTT streaming web application inspired by Netflix and Prime Video.
-Users can explore movies from TMDB, watch locally uploaded movies, manage their watchlist, subscribe for premium content, and enjoy a clean, cinematic UI.
+✨ Flask (Python)
 
-Built using:
+✨ SQLite database
 
-Flask (Python) for backend
+✨ TMDB API
 
-SQLite for database
+✨ HTML, CSS, JS (Frontend)
 
-TMDB API for movie info
+✨ GitHub Actions for CI Pipeline
 
-Vanilla JS for frontend interactions
+🚀 Features
+🎯 User Features
 
-GitHub Actions (CI/CD) for automated testing
+🔐 Login / Registration
 
-🎥 Features
-🔐 Authentication
+🎞 Movie streaming (local uploaded MP4)
 
-User Registration & Login
+📌 Add to watchlist
 
-JWT-based authentication
+❤️ Dedicated My Watchlist page
 
-Separate Admin Dashboard
+🔎 Search movies
 
-🎞 Streaming & Movie Management
+🎬 TMDB Trending & Genre-based movies
 
-Play local MP4 movie files
+💳 Subscription system for premium movies
 
-Admin can upload movies with poster, genre & description
+🛠 Admin Features
 
-Movies automatically appear on the user homepage
+🎥 Upload movies (MP4)
 
-⭐ Watchlist System
+🖼 Upload posters
 
-Add/remove movies from watchlist
+🗃 Edit / Delete movies
 
-Dedicated My Watchlist page
+🧾 Approve subscription payments
 
-Synced with backend (persistent)
+🧩 Movie list auto-updates on user homepage
 
-🎬 TMDB Movie Integration
+🤖 Developer Features
 
-Trending movies
+🧪 PyTest suite for automated testing
 
-Genres (Action, Sci-Fi, Horror etc.)
+⚙️ CI/CD pipeline using GitHub Actions
 
-Movie detail pages with posters, trailers & metadata
+📦 Clean project structure
 
-💳 Subscription System
+🔐 JWT Authentication
 
-Users must subscribe to watch local movies
-
-Admin can approve pending payments
-
-Subscription-based access control
-
-🧪 Automated Testing (PyTest)
-
-Test cases for:
-
-Auth system
-
-Movies API
-
-TMDB API
-
-Watchlist
-
-CI pipeline runs tests on every push or pull request
-
-🚀 CI/CD with GitHub Actions
-
-Auto-install dependencies
-
-Auto-run tests
-
-Fails early on broken code
-
-Supports Python 3.8 → 3.10
-
-📁 Project Structure
+🗂 Project Structure
 SE_Project_OTT_Platform/
 │── backend/
 │   ├── app.py
@@ -95,30 +66,27 @@ SE_Project_OTT_Platform/
 │   └── tests/
 │
 │── frontend/
+│   ├── index.html
 │   ├── assets/
 │   │   ├── css/
 │   │   ├── js/
-│   │   └── videos/     ← Movie files (ignored by Git)
-│   ├── index.html
-│   └── pages/
+│   │   └── videos/   ← ignored in git
 │
-│── .github/workflows/
-│   └── ci.yml          ← CI/CD pipeline
-│
-│── .gitignore
 │── requirements.txt
 │── README.md
+│── .gitignore
+│── .github/workflows/ci.yml
 
-🛠 Installation & Setup
-1️⃣ Clone the Repository
+⚙️ Installation Guide
+1️⃣ Clone Repository
 git clone https://github.com/<your-username>/SE_Project-OTT_Platform.git
 cd SE_Project-OTT_Platform
 
 2️⃣ Create Virtual Environment
 python -m venv venv
-venv/Scripts/activate        # Windows
-# OR
-source venv/bin/activate     # Mac/Linux
+venv/Scripts/activate   # Windows
+# or
+source venv/bin/activate  # Mac/Linux
 
 3️⃣ Install Dependencies
 pip install -r requirements.txt
@@ -126,81 +94,69 @@ pip install -r requirements.txt
 4️⃣ Initialize Database
 python -c "from backend.database.db_connection import init_db; init_db()"
 
-5️⃣ Run Server
+5️⃣ Run Application
 python -m backend.app
 
 
-Visit:
-➡ http://127.0.0.1:5000
+➡ Visit http://127.0.0.1:5000
 
 🧪 Running Tests
 pytest -q
 
-⚙️ GitHub Actions CI/CD
 
-A workflow file at:
-.github/workflows/ci.yml
+Includes test cases for:
 
-Automatically:
+Auth (login/register)
 
-Installs dependencies
+Movie APIs
 
-Prepares database
+TMDB integration
 
-Runs PyTest
+Watchlist system
 
-Marks run as pass/fail
+⚡ CI/CD Pipeline (GitHub Actions)
 
-Runs on:
+The file .github/workflows/ci.yml performs:
+
+✔ Install dependencies
+✔ Prepare test environment
+✔ Run all PyTest tests
+✔ Auto-check code quality
+
+Triggers on:
 
 Every push
 
-Every PR to main
+Every pull request
 
-Manual trigger from Actions tab
+Manual run from Actions tab
 
-👨‍💻 Admin Panel
+🎥 Screenshots (Add your own)
 
-Admin can:
-
-Upload movies (MP4)
-
-Delete & update movies
-
-Approve subscriptions
-
-Manage local video library
-
-🧑‍💼 Team
-Name	Role
-Kushal Kumar	Backend, Flask, Integration
-(Add your teammates)	Frontend, Design
-…	…
-✨ Screenshots (Add on GitHub)
-
-Just drag and drop images in GitHub’s markdown editor:
+You can add screenshots like:
 
 ![Home Page](screenshots/home.png)
-![Movie Page](screenshots/movie.png)
+![Movie Detail](screenshots/movie.png)
 ![Admin Panel](screenshots/admin.png)
 
-🚀 Future Enhancements
+👨‍💻 Team
+Member	Role
+Kushal Kumar	Backend + Integration
+Member 2	Frontend
+Member 3	TMDB Integration
+Member 4	Documentation & Testing
+🌟 Future Enhancements
 
-Multi-user profiles
+🎭 Multi-user profiles
 
-Continue watching section
+📊 Analytics dashboard
 
-Multi-language subtitles
+🧠 AI movie recommendation
 
-Recommendation engine
+🌐 Multi-language subtitles
 
-Analytics dashboard
+📶 Resume watching
 
-❤️ Contributions
+📝 License
 
-Pull Requests are welcome!
-Follow our CI pipeline guidelines before submitting.
-
-📜 License
-
-MIT License © 2025  
+MIT License © 2025
